@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
-import Header from "./Header";
 import Footer from "./Footer";
+import { CardHeader } from "../../components/ui/card";
 
 const Layout = () => {
   return (
     <div className="layout-container">
-      <Header />
+      <CardHeader />
       <main>
         <Outlet />
       </main>
