@@ -42,14 +42,15 @@ const AiAdvisorSection = ({ classData }) => {
         3. 질문: ${question}
       `;
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
-        }
-      );
+      const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
+      // const MODEL_NAME = "gemini-3-pro-preview-11-2025"
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+      });
 
       const data = await response.json();
       const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
