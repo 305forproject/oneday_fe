@@ -100,13 +100,23 @@ const ClassDetailPage = () => {
 
   const availableTimes = useMemo(() => {
     if (!classData?.schedules || !selectedDate) return [];
+    
+    const now = new Date(); // 현재 시간
+
     return classData.schedules
       .filter((s) => s.startAt.startsWith(selectedDate))
-      .map((s) => ({
-        timeId: s.timeId,
-        timeStr: s.startAt.split(" ")[1].substring(0, 5),
-        endTimeStr: s.endAt.split(" ")[1].substring(0, 5),
-      }));
+      .map((s) => {
+        // "YYYY-MM-DD HH:mm:ss" 형식을 Date 객체로 변환 (Safari 호환성을 위해 T로 치환 권장)
+        const scheduleDate = new Date(s.startAt.replace(" ", "T"));
+        const isPast = scheduleDate < now; // 현재 시간보다 이전인지 확인
+
+        return {
+          timeId: s.timeId,
+          timeStr: s.startAt.split(" ")[1].substring(0, 5),
+          endTimeStr: s.endAt.split(" ")[1].substring(0, 5),
+          isPast: isPast, // 지난 시간 여부 플래그
+        };
+      });
   }, [classData, selectedDate]);
 
   const classDuration = useMemo(() => {
@@ -439,11 +449,15 @@ const ClassDetailPage = () => {
                     {availableTimes.map((timeInfo) => (
                       <button
                         key={timeInfo.timeId}
+                        // [수정됨] 지난 시간일 경우 disabled 처리
+                        disabled={timeInfo.isPast}
                         onClick={() => setSelectedScheduleId(timeInfo.timeId)}
                         className={`py-3 px-4 rounded-lg text-sm font-medium border transition-all ${
                           selectedScheduleId === timeInfo.timeId
                             ? "bg-gray-900 text-white border-gray-900"
-                            : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                            : timeInfo.isPast
+                            ? "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed" // [수정됨] 지난 시간 스타일
+                            : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50 cursor-pointer"
                         }`}>
                         {timeInfo.timeStr}
                       </button>
