@@ -60,3 +60,6 @@ coverage
 
 # Debug
 *.tsbuildinfo
+
+# memory bank
+memory_bank/
