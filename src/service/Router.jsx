@@ -6,7 +6,7 @@ import Layout from "../features/layout/Layout";
 // 페이지 컴포넌트
 import Main from "../pages/MainPage";
 // import Login from "../pages/Login";
-// import ClassDetail from "../pages/ClassDetail";
+import ClassDetail from "../pages/ClassDetail";
 // import MyPage from "../pages/MyPage";
 
 const Router = () => {
@@ -16,7 +16,7 @@ const Router = () => {
         {/* 헤더/푸터가 필요한 페이지 */}
         <Route element={<Layout />}>
           <Route path="/" element={<Main />} />
-          {/* <Route path="/classes/:classId" element={<ClassDetail />} /> */}
+          <Route path="/classes/:classId" element={<ClassDetail />} />
           {/* <Route path="/my" element={<MyPage />} /> */}
         </Route>
 
