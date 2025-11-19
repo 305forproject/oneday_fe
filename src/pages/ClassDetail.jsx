@@ -12,7 +12,10 @@ import {
   CheckCircle,
 } from "lucide-react";
 import getClassDetail from "../service/class/getClassDetail";
+import AiAdvisorSection from "../features/class/AIAdvisor";
+import PaymentWidgetModal from "../features/payment/PaymentModal";
 
+// --- Main Page Component ---
 const ClassDetailPage = () => {
   const { classId } = useParams();
 
@@ -22,8 +25,27 @@ const ClassDetailPage = () => {
   const [error, setError] = useState(null);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [selectedDate, setSelectedDate] = useState(""); // "YYYY-MM-DD" 형태
-  const [selectedScheduleId, setSelectedScheduleId] = useState(null); // timeId 저장
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedScheduleId, setSelectedScheduleId] = useState(null);
+
+  const [clickCount, setClickCount] = useState(0);
+  const [showAi, setShowAi] = useState(false);
+
+  // 3번 클릭 감지 핸들러
+  const handleTitleClick = () => {
+    setClickCount((prev) => {
+      const newCount = prev + 1;
+      if (newCount >= 3) {
+        setShowAi(true); // 3번 도달하면 보여주기
+        return 0; // 카운트 초기화
+      }
+      return newCount;
+    });
+  };
+
+  // 모달 상태
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [currentOrderId, setCurrentOrderId] = useState("");
 
   // --- API Data Fetching ---
   useEffect(() => {
@@ -31,18 +53,16 @@ const ClassDetailPage = () => {
       try {
         setLoading(true);
         setError(null);
-
-        // API 호출 (가상의 함수)
+        // API 호출 (가상 함수)
         const data = await getClassDetail(classId);
         setClassData(data);
 
-        // 초기 날짜 설정 로직 수정
-        // API 데이터인 schedules 배열에서 가장 빠른 날짜를 기본값으로 설정
         if (data && data.schedules && data.schedules.length > 0) {
           const firstDate = data.schedules[0].startAt.split(" ")[0];
           setSelectedDate(firstDate);
         }
       } catch (err) {
+        console.error(err);
         setError("클래스 정보를 불러오는데 실패했습니다.");
       } finally {
         setLoading(false);
@@ -54,49 +74,53 @@ const ClassDetailPage = () => {
     }
   }, [classId]);
 
-  // --- Helper Functions & Data Processing ---
-
-  // 1. 요일 구하기 헬퍼
+  // --- Helper Functions ---
   const getDayOfWeek = (dateStr) => {
     const days = ["일", "월", "화", "수", "목", "금", "토"];
     const date = new Date(dateStr);
     return days[date.getDay()];
   };
 
-  // 2. 날짜 목록 추출 (중복 제거)
-  // useMemo를 사용하여 렌더링 최적화
   const uniqueDates = useMemo(() => {
     if (!classData?.schedules) return [];
     const dates = classData.schedules.map((s) => {
-      const datePart = s.startAt.split(" ")[0]; // "2025-11-23"
+      const datePart = s.startAt.split(" ")[0];
       return {
         date: datePart,
         day: getDayOfWeek(datePart),
-        displayDate: datePart.substring(5).replace("-", "/"), // "11/23"
+        displayDate: datePart.substring(5).replace("-", "/"),
       };
     });
-
-    // 날짜 중복 제거 (Set 활용)
     const uniqueMap = new Map();
     dates.forEach((item) => {
       if (!uniqueMap.has(item.date)) uniqueMap.set(item.date, item);
     });
-
     return Array.from(uniqueMap.values());
   }, [classData]);
 
-  // 3. 선택된 날짜에 해당하는 시간대 목록 필터링
   const availableTimes = useMemo(() => {
     if (!classData?.schedules || !selectedDate) return [];
-
     return classData.schedules
       .filter((s) => s.startAt.startsWith(selectedDate))
       .map((s) => ({
         timeId: s.timeId,
-        timeStr: s.startAt.split(" ")[1].substring(0, 5), // "10:00:00" -> "10:00"
+        timeStr: s.startAt.split(" ")[1].substring(0, 5),
         endTimeStr: s.endAt.split(" ")[1].substring(0, 5),
       }));
   }, [classData, selectedDate]);
+
+  const classDuration = useMemo(() => {
+    if (!classData?.schedules || classData.schedules.length === 0) return "-";
+    const schedule = classData.schedules[0];
+    const start = new Date(schedule.startAt.replace(" ", "T"));
+    const end = new Date(schedule.endAt.replace(" ", "T"));
+    const diffMs = end - start;
+    if (isNaN(diffMs)) return "-";
+    const diffMin = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMin / 60);
+    const minutes = diffMin % 60;
+    return minutes > 0 ? `${hours}시간 ${minutes}분` : `${hours}시간`;
+  }, [classData]);
 
   const nextImage = () => {
     if (!classData?.imageUrls || classData.imageUrls.length === 0) return;
@@ -111,39 +135,10 @@ const ClassDetailPage = () => {
     );
   };
 
-  const classDuration = useMemo(() => {
-    // 데이터나 스케줄이 없으면 빈 값 반환
-    if (!classData?.schedules || classData.schedules.length === 0) return "-";
-
-    // 첫 번째 스케줄을 기준으로 시간 계산 (모든 회차의 수업 시간은 동일하다고 가정)
-    const schedule = classData.schedules[0];
-
-    // Safari 등 브라우저 호환성을 위해 " "를 "T"로 바꾸거나 그대로 Date 객체 생성
-    // "2025-11-23 10:00" -> Date 객체 변환
-    const start = new Date(schedule.startAt);
-    const end = new Date(schedule.endAt);
-
-    // 차이값 계산 (밀리초 단위)
-    const diffMs = end - start;
-
-    // 유효하지 않은 날짜일 경우 예외 처리
-    if (isNaN(diffMs)) return "-";
-
-    const diffMin = Math.floor(diffMs / (1000 * 60)); // 전체 분(min)
-    const hours = Math.floor(diffMin / 60); // 시간
-    const minutes = diffMin % 60; // 남은 분
-
-    // 포맷팅: 분이 0이면 "N시간", 분이 있으면 "N시간 M분"
-    if (minutes > 0) {
-      return `${hours}시간 ${minutes}분`;
-    } else {
-      return `${hours}시간`;
-    }
-  }, [classData]);
-
   const renderTextList = (text, type = "dot") => {
     if (!text) return <p className="text-gray-400 text-sm">정보가 없습니다.</p>;
     const items = text.split(/\\n|\n/).filter((item) => item.trim() !== "");
+
     if (type === "number") {
       return (
         <ol className="space-y-3">
@@ -169,6 +164,27 @@ const ClassDetailPage = () => {
         </ul>
       );
     }
+  };
+
+  const handleReserveClick = () => {
+    if (!selectedDate || !selectedScheduleId) return;
+
+    // 1. 주문 ID 생성
+    const newOrderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    setCurrentOrderId(newOrderId);
+
+    // 2. 중요: Success Page에서 timeId를 알 수 있도록 저장
+    sessionStorage.setItem(
+      `order_${newOrderId}`,
+      JSON.stringify({
+        classId: classId,
+        timeId: selectedScheduleId,
+        amount: classData.price,
+      })
+    );
+
+    // 3. 모달 열기
+    setShowPaymentModal(true);
   };
 
   // --- UI Rendering ---
@@ -253,7 +269,7 @@ const ClassDetailPage = () => {
                 </div>
               )}
               {classData.categoryName && (
-                <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
+                <span className="absolute top-4 left-4 bg-gray-900 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
                   {classData.categoryName}
                 </span>
               )}
@@ -305,16 +321,25 @@ const ClassDetailPage = () => {
               </div>
             </div>
 
-            {/* Details & Curriculum */}
+            {/* Details & Curriculum (Icon Style) */}
             <div>
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
+              <h3
+                onClick={handleTitleClick}
+                className="text-lg font-bold text-gray-900 mb-5 cursor-pointer select-none active:text-gray-600 transition-colors">
                 클래스 소개
               </h3>
+
               <div className="bg-gray-50 p-6 rounded-2xl mb-6 border border-gray-100">
-                <p className="text-gray-700 leading-relaxed text-lg">
+                <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-line">
                   {classData.classDetail}
                 </p>
               </div>
+
+              {showAi && (
+                <div className="animate-in fade-in slide-in-from-top-4 duration-500">
+                  <AiAdvisorSection classData={classData} />
+                </div>
+              )}
             </div>
 
             <div>
@@ -376,14 +401,19 @@ const ClassDetailPage = () => {
                         key={item.date}
                         onClick={() => {
                           setSelectedDate(item.date);
-                          setSelectedScheduleId(null); // 날짜 변경 시 시간 선택 초기화
+                          setSelectedScheduleId(null);
                         }}
                         className={`flex flex-col items-center py-2 px-1 rounded-lg border transition-all ${
                           selectedDate === item.date
                             ? "bg-gray-900 text-white border-gray-900"
-                            : "border-gray-200 hover:bg-gray-50"
+                            : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
                         }`}>
-                        <span className="text-xs text-gray-500 mb-1">
+                        <span
+                          className={`text-xs mb-1 ${
+                            selectedDate === item.date
+                              ? "text-gray-300"
+                              : "text-gray-400"
+                          }`}>
                           {item.day}
                         </span>
                         <span className="font-bold text-sm">
@@ -412,7 +442,7 @@ const ClassDetailPage = () => {
                         onClick={() => setSelectedScheduleId(timeInfo.timeId)}
                         className={`py-3 px-4 rounded-lg text-sm font-medium border transition-all ${
                           selectedScheduleId === timeInfo.timeId
-                            ? "bg-gray-900 text-white border-gray-900" // Blue -> Gray-900
+                            ? "bg-gray-900 text-white border-gray-900"
                             : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
                         }`}>
                         {timeInfo.timeStr}
@@ -429,24 +459,28 @@ const ClassDetailPage = () => {
               <button
                 className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
                   selectedDate && selectedScheduleId
-                    ? "bg-gray-900 text-white hover:bg-black shadow-lg" // Blue -> Gray-900
+                    ? "bg-gray-900 text-white shadow-lg hover:bg-black"
                     : "bg-gray-100 text-gray-400 cursor-not-allowed"
                 }`}
                 disabled={!selectedDate || !selectedScheduleId}
-                onClick={() => {
-                  const selectedTimeStr = availableTimes.find(
-                    (t) => t.timeId === selectedScheduleId
-                  )?.timeStr;
-                  alert(
-                    `예약 진행\n날짜: ${selectedDate}\n시간: ${selectedTimeStr}\nID: ${selectedScheduleId}`
-                  );
-                }}>
+                onClick={handleReserveClick}>
                 예약하기
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {classData && (
+        <PaymentWidgetModal
+          show={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          amount={classData.price}
+          orderName={classData.className}
+          orderId={currentOrderId}
+          customerName="홍길동"
+        />
+      )}
     </div>
   );
 };
