@@ -211,9 +211,9 @@ export default function ClassRegister() {
     // 파일 크기 및 형식 검증
     const validFiles = [];
     for (const file of files) {
-      // 10MB 제한
-      if (file.size > 10 * 1024 * 1024) {
-        alert(`${file.name}은(는) 10MB를 초과합니다`);
+      // 5MB 제한
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`${file.name}은(는) 5MB를 초과합니다`);
         continue;
       }
 
@@ -335,17 +335,20 @@ export default function ClassRegister() {
         latitude: formData.latitude.trim() || null,
         zipcode: formData.zipcode.trim() || null,
         maxCapacity: Number(formData.maxCapacity),
-        price: Number(formData.maxCapacity),
+        price: Number(formData.price),
         dates: uniqueDates,
-        startTime: firstSlot.startTime + ":00", // HH:mm:ss 형식
+        startTime: firstSlot.startTime + ":00",
         endTime: firstSlot.endTime + ":00",
-        images: orderedImages.map((img, idx) => ({
-          file: img.file,
-          imageOrder: idx + 1,
-        })),
       };
 
-      const response = await createClass(requestData);
+      // 이미지 파일 배열 생성 (대표 이미지 순서대로)
+      const imageFiles = orderedImages.map((img) => img.file);
+
+      const response = await createClass(
+        requestData,
+        imageFiles,
+        primaryImageIndex
+      );
 
       // 성공 시 클래스 상세 페이지로 이동
       navigate(`/classes/${response.classId}`);
@@ -651,8 +654,7 @@ export default function ClassRegister() {
             <CardHeader>
               <CardTitle>클래스 이미지</CardTitle>
               <CardDescription>
-                최대 8개, 각 10MB 이하의 이미지를 등록해주세요 (첫 번째 이미지가
-                대표 이미지)
+                최대 8개, 각 5MB 이하의 이미지를 등록해주세요
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -667,7 +669,7 @@ export default function ClassRegister() {
                         클릭하여 파일을 선택하거나 드래그하여 업로드
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        JPG, PNG, GIF / 최대 10MB / 최대 8개
+                        JPG, PNG, GIF, WEBP / 최대 5MB / 최대 8개
                       </p>
                     </div>
                   </Label>

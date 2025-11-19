@@ -10,6 +10,8 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import ClassDetail from "../pages/ClassDetail";
 import ClassRegister from "../pages/ClassRegister";
+import PaymentSuccessPage from "../pages/PaymentSuccessPage";
+import PaymentWidgetModal from "../features/payment/PaymentModal";
 // import MyPage from "../pages/MyPage";
 
 const Router = () => {
@@ -26,6 +28,8 @@ const Router = () => {
           </Route>
 
           {/* 헤더/푸터가 없는 페이지  */}
+          <Route path="payments" element={<PaymentWidgetModal/>}/>
+          <Route path="/payment/success" element={<PaymentSuccessPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>

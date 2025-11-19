@@ -1,29 +1,39 @@
 import axiosClient from "../axiosInstance";
 
 /**
- * 클래스 등록
- * @param {Object} classData - 클래스 등록 정보
- * @param {string} classData.category - 카테고리 (COOKING, CRAFTS, EXERCISE, ART, MUSIC, OTHER)
- * @param {string} classData.className - 클래스명
- * @param {string} classData.classDetail - 클래스 소개
- * @param {string} classData.curriculum - 커리큘럼
- * @param {string} classData.included - 포함 사항
- * @param {string} classData.required - 준비물
- * @param {string} classData.location - 장소
- * @param {string} classData.longitude - 경도
- * @param {string} classData.latitude - 위도
- * @param {string} classData.zipcode - 우편번호
- * @param {number} classData.maxCapacity - 최대 정원
- * @param {number} classData.price - 가격
- * @param {string[]} classData.dates - 날짜 배열 (ISO Date 형식)
- * @param {string} classData.startTime - 시작 시간 (HH:mm:ss)
- * @param {string} classData.endTime - 종료 시간 (HH:mm:ss)
- * @param {Array<{imageUrl: string, imageOrder: number}>} classData.images - 이미지 정보
+ * 클래스 등록 (multipart/form-data)
+ * @param {Object} classData - 클래스 데이터
+ * @param {File[]} imageFiles - 이미지 파일 배열
+ * @param {number} primaryImageIndex - 대표 이미지 인덱스
  * @returns {Promise<{classId: number, className: string, category: string}>}
  */
-const createClass = async (classData) => {
+const createClass = async (classData, imageFiles, primaryImageIndex) => {
   try {
-    const response = await axiosClient.post("/classes", classData);
+    const formData = new FormData();
+
+    // 클래스 데이터를 JSON 문자열로 추가
+    Object.keys(classData).forEach((key) => {
+      const value = classData[key];
+      if (Array.isArray(value)) {
+        value.forEach((item) => formData.append(key, item));
+      } else if (value !== null && value !== undefined) {
+        formData.append(key, value);
+      }
+    });
+
+    // 이미지 파일 추가
+    imageFiles.forEach((file) => {
+      formData.append("imageFiles", file);
+    });
+
+    // 대표 이미지 인덱스 추가
+    formData.append("primaryImageIndex", primaryImageIndex);
+
+    const response = await axiosClient.post("/classes", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     if (response.data.success) {
       return response.data.data;
