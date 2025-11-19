@@ -11,7 +11,6 @@ import getClasses from "../service/class/getClasses";
 import { ClassCard } from "../components/ClassCard";
 import getCategories from "../service/class/getCategories";
 
-
 // --- Components ---
 
 /**
@@ -100,7 +99,8 @@ export default function App() {
           {/* 검색 바 */}
           <form
             onSubmit={handleSearchSubmit} // 이벤트 핸들러 변경
-            className="mt-8 flex w-full max-w-2xl items-center rounded-lg border border-border bg-card shadow-sm">
+            className="mt-8 flex w-full max-w-2xl items-center rounded-lg border border-border bg-card shadow-sm"
+          >
             <div className="pl-5 pr-3 text-muted-foreground">
               <Search size={20} />
             </div>
@@ -113,7 +113,8 @@ export default function App() {
             />
             <button
               type="submit"
-              className="m-2 shrink-0 rounded-md bg-primary px-6 py-3 text-base font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+              className="m-2 shrink-0 rounded-md bg-primary px-6 py-3 text-base font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            >
               검색
             </button>
           </form>
@@ -126,7 +127,8 @@ export default function App() {
               {[...Array(6)].map((_, i) => (
                 <div
                   key={i}
-                  className="h-10 w-20 animate-pulse rounded-full bg-muted"></div>
+                  className="h-10 w-20 animate-pulse rounded-full bg-muted"
+                ></div>
               ))}
             </div>
           ) : (
@@ -142,7 +144,8 @@ export default function App() {
                         ? "bg-primary text-primary-foreground shadow-md"
                         : "bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground"
                     }
-                  `}>
+                  `}
+                >
                   {category.categoryName}
                 </button>
               ))}
@@ -156,7 +159,8 @@ export default function App() {
             <h2 className="text-3xl font-bold tracking-tight">인기 클래스</h2>
             <a
               href="#"
-              className="group flex items-center text-sm font-semibold text-primary transition-colors hover:text-primary/80">
+              className="group flex items-center text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+            >
               전체보기
               <ChevronRight
                 size={16}
@@ -179,7 +183,8 @@ export default function App() {
               {[...Array(6)].map((_, i) => (
                 <div
                   key={i}
-                  className="flex flex-col space-y-3 rounded-lg bg-card p-4 shadow-md border border-border">
+                  className="flex flex-col space-y-3 rounded-lg bg-card p-4 shadow-md border border-border"
+                >
                   <div className="aspect-video w-full animate-pulse rounded bg-muted"></div>
                   <div className="h-4 w-1/4 animate-pulse rounded bg-muted"></div>
                   <div className="h-6 w-3/4 animate-pulse rounded bg-muted"></div>
@@ -221,8 +226,9 @@ export default function App() {
             여러분의 재능을 나누고 수익을 창출하세요
           </p>
           <button
-            onClick={() => (window.location.href = "/instructor/register")}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-base font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+            onClick={() => (window.location.href = "/register")}
+            className="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-base font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          >
             강사 등록하기
           </button>
         </section>
