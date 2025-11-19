@@ -55,17 +55,18 @@ export default function LoginPage() {
 
     try {
       // 로그인 API 호출
-      const tokens = await loginAPI(email, password);
+      const data = await loginAPI(email, password);
 
       // AuthContext에 로그인 정보 저장
       login(
         {
-          accessToken: tokens.accessToken,
-          refreshToken: tokens.refreshToken,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
         },
         {
-          email: email,
-          // 추가 사용자 정보는 필요 시 /auth/me API로 가져올 수 있음
+          userId: data.userId,
+          email: data.email,
+          name: data.name,
         }
       );
 
