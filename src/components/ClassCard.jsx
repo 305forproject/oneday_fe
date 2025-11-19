@@ -15,7 +15,7 @@ export function ClassCard({ classInfo }) {
   } = classInfo;
 
   const navigate = () => {
-    window.location.href = `/class/${classId}`;
+    window.location.href = `/classes/${classId}`;
   };
 
   return (
