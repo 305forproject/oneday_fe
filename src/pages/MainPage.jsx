@@ -211,6 +211,21 @@ export default function App() {
             </div>
           )}
         </section>
+
+        {/* --- CTA Section --- */}
+        <section className="mt-24 mb-12 rounded-lg bg-primary/5 py-16 px-6 text-center">
+          <h2 className="text-3xl font-bold mb-4">
+            강사로 활동하고 싶으신가요?
+          </h2>
+          <p className="text-muted-foreground mb-6 text-pretty max-w-2xl mx-auto">
+            여러분의 재능을 나누고 수익을 창출하세요
+          </p>
+          <button
+            onClick={() => (window.location.href = "/instructor/register")}
+            className="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-base font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+            강사 등록하기
+          </button>
+        </section>
       </main>
     </div>
   );
