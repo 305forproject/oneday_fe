@@ -7,6 +7,7 @@ import Layout from "../features/layout/Layout";
 // 페이지 컴포넌트
 import Main from "../pages/MainPage";
 import Login from "../pages/Login";
+import Signup from "../pages/Signup";
 import ClassDetail from "../pages/ClassDetail";
 // import MyPage from "../pages/MyPage";
 
@@ -24,7 +25,7 @@ const Router = () => {
 
           {/* 헤더/푸터가 없는 페이지  */}
           <Route path="/login" element={<Login />} />
-          {/* <Route path="/signup" element={<Signup />} /> */}
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
