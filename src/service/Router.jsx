@@ -9,6 +9,7 @@ import Main from "../pages/MainPage";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import ClassDetail from "../pages/ClassDetail";
+import ClassRegister from "../pages/ClassRegister";
 import PaymentSuccessPage from "../pages/PaymentSuccessPage";
 import PaymentWidgetModal from "../features/payment/PaymentModal";
 // import MyPage from "../pages/MyPage";
@@ -22,6 +23,7 @@ const Router = () => {
           <Route element={<Layout />}>
             <Route path="/" element={<Main />} />
             <Route path="/classes/:classId" element={<ClassDetail />} />
+            <Route path="/register" element={<ClassRegister />} />
             {/* <Route path="/my" element={<MyPage />} /> */}
           </Route>
 

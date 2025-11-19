@@ -38,24 +38,14 @@ export function Header() {
           >
             클래스 찾기
           </Link>
-          <Link
-            to="/instructor/register"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
-            강사 등록
-          </Link>
-          <Link
-            to="/instructor/bookings"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
-            강사 예약관리
-          </Link>
-          <Link
-            to="/student/bookings"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
-            내 예약
-          </Link>
+          {isAuthenticated() && (
+            <Link
+              to="/register"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              클래스 등록
+            </Link>
+          )}
         </nav>
 
         {/* 로그인 상태에 따른 버튼 표시 */}
