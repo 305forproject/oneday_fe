@@ -2,6 +2,18 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { Calendar } from "../components/ui/calendar";
+
+// 카테고리 ID → CategoryType Enum 매핑
+const CATEGORY_ID_TO_TYPE = {
+  1: "HEALTH_BEAUTY",
+  2: "CRAFT_ART",
+  3: "SPORTS_LEISURE",
+  4: "COOKING_BAKING",
+  5: "MUSIC_DANCE",
+  6: "LANGUAGE_EDUCATION",
+  7: "IT_TECHNOLOGY",
+  8: "LIFESTYLE",
+};
 import {
   Card,
   CardContent,
@@ -324,7 +336,7 @@ export default function ClassRegister() {
 
       // API 요청 데이터 생성
       const requestData = {
-        categoryId: Number(formData.category), // categoryId를 숫자로 전송
+        category: CATEGORY_ID_TO_TYPE[Number(formData.category)],
         className: formData.className.trim(),
         classDetail: formData.classDetail.trim() || null,
         curriculum: formData.curriculum.trim() || null,
@@ -337,8 +349,8 @@ export default function ClassRegister() {
         maxCapacity: Number(formData.maxCapacity),
         price: Number(formData.price),
         dates: uniqueDates,
-        startTime: firstSlot.startTime + ":00",
-        endTime: firstSlot.endTime + ":00",
+        startTime: firstSlot.startTime,
+        endTime: firstSlot.endTime,
       };
 
       // 이미지 파일 배열 생성 (대표 이미지 순서대로)
