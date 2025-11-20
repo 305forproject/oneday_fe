@@ -32,12 +32,6 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">
-          <Link
-            to="/"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
-            클래스 찾기
-          </Link>
           {isAuthenticated() && (
             <Link
               to="/register"
