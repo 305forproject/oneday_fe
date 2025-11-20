@@ -55,10 +55,10 @@ export const SelectTrigger = ({
   );
 };
 
-export const SelectValue = ({ placeholder = "", value }) => {
+export const SelectValue = ({ placeholder = "", value, children }) => {
   return (
     <span className={value ? "" : "text-muted-foreground"}>
-      {value || placeholder}
+      {children || value || placeholder}
     </span>
   );
 };

@@ -319,7 +319,7 @@ export default function ClassRegister() {
 
       // API 요청 데이터 생성
       const requestData = {
-        category: formData.category, // DB에서 가져온 categoryType 사용
+        categoryId: Number(formData.category), // categoryId를 숫자로 전송
         className: formData.className.trim(),
         classDetail: formData.classDetail.trim() || null,
         curriculum: formData.curriculum.trim() || null,
@@ -405,13 +405,20 @@ export default function ClassRegister() {
                           ? "카테고리 로딩 중..."
                           : "카테고리 선택"
                       }
-                    />
+                    >
+                      {formData.category
+                        ? categories.find(
+                            (cat) =>
+                              String(cat.categoryId) === formData.category
+                          )?.categoryName
+                        : null}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map((cat, index) => (
+                    {categories.map((cat) => (
                       <SelectItem
-                        key={`${cat.categoryType}-${index}`}
-                        value={cat.categoryType}
+                        key={cat.categoryId}
+                        value={String(cat.categoryId)}
                       >
                         {cat.categoryName}
                       </SelectItem>
