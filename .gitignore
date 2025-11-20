@@ -57,6 +57,7 @@ coverage
 *.temp
 .temp/
 .tmp/
+/uploads/
 
 # Debug
 *.tsbuildinfo
