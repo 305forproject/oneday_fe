@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "../contexts/AuthContext";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 // 레이아웃
 import Layout from "../features/layout/Layout";
@@ -24,13 +25,34 @@ const Router = () => {
           <Route element={<Layout />}>
             <Route path="/" element={<Main />} />
             <Route path="/classes/:classId" element={<ClassDetail />} />
-            <Route path="/register" element={<ClassRegister />} />
-            <Route path="/my" element={<MyReservations />} />
-            <Route path="/teacher" element={<TeacherPage />} />
+            <Route
+              path="/register"
+              element={
+                <ProtectedRoute>
+                  <ClassRegister />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my"
+              element={
+                <ProtectedRoute>
+                  <MyReservations />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/teacher"
+              element={
+                <ProtectedRoute>
+                  <TeacherPage />
+                </ProtectedRoute>
+              }
+            />
           </Route>
 
           {/* 헤더/푸터가 없는 페이지  */}
-          <Route path="payments" element={<PaymentWidgetModal/>}/>
+          <Route path="payments" element={<PaymentWidgetModal />} />
           <Route path="/payment/success" element={<PaymentSuccessPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
