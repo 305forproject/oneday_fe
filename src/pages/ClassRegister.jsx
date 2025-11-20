@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { Calendar } from "../components/ui/calendar";
 import {
   Card,
@@ -71,8 +72,8 @@ export default function ClassRegister() {
 
   // 일정 관련
   const [selectedDates, setSelectedDates] = useState([]);
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
   const [timeSlots, setTimeSlots] = useState([]);
 
   // 이미지 관련
@@ -113,8 +114,12 @@ export default function ClassRegister() {
   // 일정 추가
   const addTimeSlot = () => {
     if (selectedDates.length > 0 && startTime && endTime) {
+      // dayjs 객체에서 HH:mm:00 형식으로 변환
+      const startTimeStr = startTime.format("HH:mm:00");
+      const endTimeStr = endTime.format("HH:mm:00");
+
       // 종료 시간이 시작 시간보다 이른지 확인
-      if (startTime >= endTime) {
+      if (startTimeStr >= endTimeStr) {
         alert("종료 시간은 시작 시간보다 늦어야 합니다");
         return;
       }
@@ -128,8 +133,8 @@ export default function ClassRegister() {
 
         return {
           date: `${year}-${month}-${day}`,
-          startTime: startTime,
-          endTime: endTime,
+          startTime: startTimeStr,
+          endTime: endTimeStr,
         };
       });
 
@@ -181,8 +186,8 @@ export default function ClassRegister() {
       // 중복이 없으면 추가
       setTimeSlots([...timeSlots, ...newSlots]);
       setSelectedDates([]);
-      setStartTime("");
-      setEndTime("");
+      setStartTime(null);
+      setEndTime(null);
     } else {
       alert("날짜, 시작 시간, 종료 시간을 모두 입력해주세요");
     }
@@ -561,61 +566,74 @@ export default function ClassRegister() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label>날짜 선택</Label>
-                  <div>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !selectedDates.length && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {selectedDates.length > 0
-                            ? `${selectedDates.length}개 날짜 선택됨`
-                            : "날짜를 선택하세요"}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="multiple"
-                          selected={selectedDates}
-                          onSelect={(dates) => setSelectedDates(dates || [])}
-                          disabled={(date) => {
-                            const today = new Date();
-                            today.setHours(0, 0, 0, 0);
-                            return date <= today;
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+              <div className="grid md:grid-cols-4 gap-4">
+                <div className="md:col-span-2 space-y-2">
+                  <Label className="block mb-2">날짜 선택</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !selectedDates.length && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {selectedDates.length > 0
+                          ? `${selectedDates.length}개 날짜 선택됨`
+                          : "날짜를 선택하세요"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="multiple"
+                        selected={selectedDates}
+                        onSelect={(dates) => setSelectedDates(dates || [])}
+                        disabled={(date) => {
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
+                          return date <= today;
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="startTime">시작 시간</Label>
-                    <Input
-                      id="startTime"
-                      type="time"
-                      value={startTime}
-                      onChange={(e) => setStartTime(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="endTime">종료 시간</Label>
-                    <Input
-                      id="endTime"
-                      type="time"
-                      value={endTime}
-                      onChange={(e) => setEndTime(e.target.value)}
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label className="block mb-2">시작 시간</Label>
+                  <TimePicker
+                    value={startTime}
+                    onChange={(newValue) => setStartTime(newValue)}
+                    timeSteps={{ minutes: 30 }}
+                    format="HH:mm"
+                    ampm={false}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        variant: "outlined",
+                        size: "small",
+                      },
+                    }}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="block mb-2">종료 시간</Label>
+                  <TimePicker
+                    value={endTime}
+                    onChange={(newValue) => setEndTime(newValue)}
+                    timeSteps={{ minutes: 30 }}
+                    format="HH:mm"
+                    ampm={false}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        variant: "outlined",
+                        size: "small",
+                      },
+                    }}
+                  />
                 </div>
               </div>
 
