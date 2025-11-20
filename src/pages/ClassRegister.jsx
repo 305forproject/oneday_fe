@@ -492,7 +492,6 @@ export default function ClassRegister() {
                     type="number"
                     placeholder="45000"
                     min="0"
-                    step="1000"
                     value={formData.price}
                     onChange={handleInputChange}
                   />
