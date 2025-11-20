@@ -11,10 +11,18 @@ const createClass = async (classData, imageFiles, primaryImageIndex) => {
   try {
     const formData = new FormData();
 
-    // 클래스 데이터를 JSON 문자열로 추가
+    // 클래스 데이터를 FormData에 추가
     Object.keys(classData).forEach((key) => {
       const value = classData[key];
-      if (Array.isArray(value)) {
+      if (key === "schedules" && Array.isArray(value)) {
+        // schedules 배열은 인덱스 기반 필드명으로 추가
+        // Spring @ModelAttribute가 List<TimeSlotDto>로 바인딩할 수 있도록
+        value.forEach((schedule, index) => {
+          formData.append(`schedules[${index}].date`, schedule.date);
+          formData.append(`schedules[${index}].startTime`, schedule.startTime);
+          formData.append(`schedules[${index}].endTime`, schedule.endTime);
+        });
+      } else if (Array.isArray(value)) {
         value.forEach((item) => formData.append(key, item));
       } else if (value !== null && value !== undefined) {
         formData.append(key, value);
@@ -38,7 +46,9 @@ const createClass = async (classData, imageFiles, primaryImageIndex) => {
     if (response.data.success) {
       return response.data.data;
     } else {
-      throw new Error(response.data.error?.message || "클래스 등록에 실패했습니다");
+      throw new Error(
+        response.data.error?.message || "클래스 등록에 실패했습니다"
+      );
     }
   } catch (error) {
     console.error("클래스 등록 API 오류:", error);

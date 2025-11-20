@@ -340,12 +340,6 @@ export default function ClassRegister() {
     setLoading(true);
 
     try {
-      // 날짜만 추출 (중복 제거)
-      const uniqueDates = [...new Set(timeSlots.map((slot) => slot.date))];
-
-      // 첫 번째 슬롯의 시간 사용 (모든 날짜에 동일한 시간 적용)
-      const firstSlot = timeSlots[0];
-
       // 장소와 상세 주소 합치기
       const fullLocation = formData.detailLocation.trim()
         ? `${formData.location.trim()} ${formData.detailLocation.trim()}`
@@ -365,9 +359,11 @@ export default function ClassRegister() {
         zipcode: formData.zipcode.trim() || null,
         maxCapacity: Number(formData.maxCapacity),
         price: Number(formData.price),
-        dates: uniqueDates,
-        startTime: firstSlot.startTime,
-        endTime: firstSlot.endTime,
+        schedules: timeSlots.map((slot) => ({
+          date: slot.date,
+          startTime: slot.startTime,
+          endTime: slot.endTime,
+        })),
       };
 
       // 이미지 파일 배열 생성 (원본 순서 유지)
