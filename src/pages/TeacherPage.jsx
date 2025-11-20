@@ -27,31 +27,44 @@ const TeacherPage = () => {
     activeTab === "upcoming" ? schedules.upcoming : schedules.past;
 
   return (
-    <div className="p-4 bg-gray-100 min-h-screen">
+    // 1. 전체 페이지 배경을 흰색(bg-white)으로 변경
+    <div className="max-w-3xl mx-auto p-4 bg-white min-h-screen font-sans">
       {/* 탭 버튼 영역 */}
       <div className="flex gap-2 mb-4">
         <button
-          className={`px-4 py-2 rounded-full ${
-            activeTab === "upcoming" ? "bg-white font-bold" : "text-gray-500"
+          className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
+            activeTab === "upcoming"
+              ? "bg-black text-white"
+              : "bg-gray-100 text-gray-500 hover:bg-gray-200"
           }`}
           onClick={() => setActiveTab("upcoming")}>
           예정된 클래스 ({schedules.upcoming.length})
         </button>
         <button
-          className={`px-4 py-2 rounded-full ${
-            activeTab === "past" ? "bg-white font-bold" : "text-gray-500"
+          className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
+            activeTab === "past"
+              ? "bg-black text-white"
+              : "bg-gray-100 text-gray-500 hover:bg-gray-200"
           }`}
           onClick={() => setActiveTab("past")}>
           지난 클래스 ({schedules.past.length})
         </button>
       </div>
 
-      {/* 리스트 렌더링 */}
-      <div className="space-y-4">
-        {currentList.map((schedule) => (
-          // key는 고유한 값이어야 함 (timeId 사용 권장)
-          <ClassCard key={schedule.timeId} schedule={schedule} />
-        ))}
+      {/* 2. 리스트 영역을 회색 박스(bg-gray-50)로 감싸기 */}
+      <div className="bg-gray-50 rounded-2xl p-4 min-h-[500px]">
+        <div className="space-y-4">
+          {currentList.length > 0 ? (
+            currentList.map((schedule) => (
+              // ClassCard는 흰색 배경을 가지고 있으므로, 회색 박스 안에서 잘 보입니다.
+              <ClassCard key={schedule.timeId} schedule={schedule} />
+            ))
+          ) : (
+            <div className="text-center py-10 text-gray-400">
+              등록된 클래스 스케줄이 없습니다.
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -129,8 +142,14 @@ const ClassCard = ({ schedule }) => {
               <span className="font-medium">
                 📅 {formatDate(schedule.startAt)}
               </span>
-              {/* ▼ 여기가 소요시간 넣는 곳 ▼ */}
-              <span className="text-black ml-2">
+
+              {/* ✅ formatTime 함수 사용 위치 */}
+              <span className="ml-2 text-gray-800">
+                {formatTime(schedule.startAt)}
+              </span>
+
+              {/* 소요 시간 */}
+              <span className="text-gray-600 ml-1">
                 ({getDuration(schedule.startAt, schedule.endAt)})
               </span>
             </p>
@@ -140,8 +159,8 @@ const ClassCard = ({ schedule }) => {
         <span
           className={`text-xs px-2 py-1 rounded ${
             isPast
-              ? "bg-gray-100 text-gray-400" // 지난 클래스: 연회색
-              : "bg-black text-white" // 예정 클래스: 검정 배경 + 흰 글씨
+              ? "bg-gray-100 text-gray-400" // 지난 클래스: 연회색 (종료)
+              : "bg-blue-600 text-white" // 예정 클래스: 검정 배경 + 흰 글씨
           }`}>
           {isPast ? "종료" : "확정"}
         </span>
