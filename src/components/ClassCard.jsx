@@ -4,14 +4,14 @@ import { MapPin, Users, Clock } from "lucide-react";
 
 export function ClassCard({ classInfo }) {
   // 1. 들어오는 JSON 데이터의 키값에 맞춰 변수를 추출합니다.
-  const { 
-    classId, 
-    representativeImageUrl, 
-    className, 
-    categoryName, 
-    teacherName, 
-    location, 
-    price 
+  const {
+    classId,
+    representativeImageUrl,
+    className,
+    categoryName,
+    teacherName,
+    location,
+    price,
   } = classInfo;
 
   const navigate = () => {
@@ -23,7 +23,7 @@ export function ClassCard({ classInfo }) {
       onClick={navigate}
       className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full"
     >
-      <div className="relative aspect-[4/3] overflow-hidden">
+      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <img
           // 3. image -> representativeImageUrl로 변경
           src={representativeImageUrl || "/placeholder.svg"}
@@ -36,7 +36,7 @@ export function ClassCard({ classInfo }) {
           {categoryName}
         </Badge>
       </div>
-      
+
       <CardContent className="p-4">
         <h3 className="font-semibold text-lg mb-2 line-clamp-2 text-balance">
           {/* 6. title -> className으로 변경 */}
@@ -53,7 +53,7 @@ export function ClassCard({ classInfo }) {
           </div>
         </div>
       </CardContent>
-      
+
       <CardFooter className="p-4 pt-0">
         <div className="flex items-center justify-between w-full">
           <span className="text-2xl font-bold text-primary">

@@ -19,6 +19,7 @@
     "@tailwindcss/vite": "^4.1.17",
     "@tosspayments/tosspayments-sdk": "^2.4.1",
     "axios": "^1.12.2",
+    "browser-image-compression": "^2.0.2",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.19",
