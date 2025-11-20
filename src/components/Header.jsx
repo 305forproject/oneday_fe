@@ -47,8 +47,7 @@ export function Header() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm">
-                    <User className="h-4 w-4 mr-2" />
-                    내 메뉴
+                    <User className="h-4 w-4 mr-2" />내 메뉴
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">

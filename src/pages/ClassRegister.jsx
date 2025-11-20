@@ -42,10 +42,13 @@ import { Plus, X, Loader2, CalendarIcon, Upload, Star } from "lucide-react";
 import { cn } from "../lib/utils";
 import createClass from "../service/class/createClass";
 import getCategories from "../service/class/getCategories";
+import { resizeImage, getImageConfig } from "../utils/imageResizer";
 
 export default function ClassRegister() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [resizingImages, setResizingImages] = useState(false);
+  const [resizeProgress, setResizeProgress] = useState(0);
 
   // 카테고리 데이터 (DB에서 가져옴)
   const [categories, setCategories] = useState([]);
@@ -211,7 +214,7 @@ export default function ClassRegister() {
   };
 
   // 이미지 파일 선택 핸들러
-  const handleImageSelect = (e) => {
+  const handleImageSelect = async (e) => {
     const files = Array.from(e.target.files);
 
     // 최대 8개 제한
@@ -223,9 +226,9 @@ export default function ClassRegister() {
     // 파일 크기 및 형식 검증
     const validFiles = [];
     for (const file of files) {
-      // 5MB 제한
-      if (file.size > 5 * 1024 * 1024) {
-        alert(`${file.name}은(는) 5MB를 초과합니다`);
+      // 10MB 제한 (리사이징 전 원본 크기)
+      if (file.size > 10 * 1024 * 1024) {
+        alert(`${file.name}은(는) 10MB를 초과합니다`);
         continue;
       }
 
@@ -238,17 +241,45 @@ export default function ClassRegister() {
       validFiles.push(file);
     }
 
-    // 미리보기 URL 생성
-    const newImages = validFiles.map((file) => ({
-      file: file,
-      preview: URL.createObjectURL(file),
-      name: file.name,
-    }));
+    if (validFiles.length === 0) {
+      e.target.value = "";
+      return;
+    }
 
-    setImages((prev) => [...prev, ...newImages]);
+    // 이미지 리사이징 처리
+    setResizingImages(true);
+    setResizeProgress(0);
 
-    // 입력 초기화 (같은 파일 재선택 가능하도록)
-    e.target.value = "";
+    try {
+      const resizedImages = [];
+
+      for (let i = 0; i < validFiles.length; i++) {
+        const file = validFiles[i];
+
+        // 개별 이미지 리사이징
+        const resizedFile = await resizeImage(file, (progress) => {
+          const totalProgress =
+            ((i + progress / 100) / validFiles.length) * 100;
+          setResizeProgress(Math.round(totalProgress));
+        });
+
+        // 미리보기 URL 생성
+        resizedImages.push({
+          file: resizedFile,
+          preview: URL.createObjectURL(resizedFile),
+          name: file.name,
+        });
+      }
+
+      setImages((prev) => [...prev, ...resizedImages]);
+    } catch (error) {
+      console.error("Image processing error:", error);
+      alert(error.message || "이미지 처리 중 오류가 발생했습니다");
+    } finally {
+      setResizingImages(false);
+      setResizeProgress(0);
+      e.target.value = "";
+    }
   };
 
   // 이미지 개별 삭제
@@ -320,20 +351,6 @@ export default function ClassRegister() {
         ? `${formData.location.trim()} ${formData.detailLocation.trim()}`
         : formData.location.trim();
 
-      // 이미지 배열 생성 (대표 이미지가 첫 번째)
-      const orderedImages = images.map((img, index) => ({
-        file: img.file,
-        imageOrder:
-          index === primaryImageIndex
-            ? 1
-            : index < primaryImageIndex
-            ? index + 2
-            : index + 1,
-      }));
-
-      // 대표 이미지를 첫 번째로 정렬
-      orderedImages.sort((a, b) => a.imageOrder - b.imageOrder);
-
       // API 요청 데이터 생성
       const requestData = {
         category: CATEGORY_ID_TO_TYPE[Number(formData.category)],
@@ -353,9 +370,10 @@ export default function ClassRegister() {
         endTime: firstSlot.endTime,
       };
 
-      // 이미지 파일 배열 생성 (대표 이미지 순서대로)
-      const imageFiles = orderedImages.map((img) => img.file);
+      // 이미지 파일 배열 생성 (원본 순서 유지)
+      const imageFiles = images.map((img) => img.file);
 
+      // 대표 이미지 인덱스는 원본 순서 기준으로 전달
       const response = await createClass(
         requestData,
         imageFiles,
@@ -696,23 +714,67 @@ export default function ClassRegister() {
             <CardHeader>
               <CardTitle>클래스 이미지</CardTitle>
               <CardDescription>
-                최대 8개, 각 5MB 이하의 이미지를 등록해주세요
+                최대 8개의 이미지를 등록해주세요. 업로드 시 자동으로
+                최적화됩니다.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
+                {/* 권장 사양 안내 */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="text-sm font-semibold text-blue-900 mb-2">
+                    📸 이미지 권장 사양
+                  </h4>
+                  <ul className="text-xs text-blue-700 space-y-1">
+                    <li>• 비율: 4:3 (가로:세로)</li>
+                    <li>• 권장 크기: 1200x900px</li>
+                    <li>• 최소 크기: 800x600px</li>
+                    <li>• 파일 형식: JPG, PNG, GIF, WEBP</li>
+                    <li className="text-green-700 font-medium mt-2">
+                      ✨ 업로드 시 자동으로 4:3 비율로 조정됩니다
+                    </li>
+                  </ul>
+                </div>
+
                 {/* 파일 선택 버튼 */}
                 <div>
-                  <Label htmlFor="imageUpload" className="cursor-pointer">
-                    <div className="border-2 border-dashed border-input rounded-lg p-6 text-center hover:border-primary transition-colors">
-                      <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-2" />
-                      <p className="text-sm font-medium mb-1">이미지 업로드</p>
-                      <p className="text-xs text-muted-foreground">
-                        클릭하여 파일을 선택하거나 드래그하여 업로드
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        JPG, PNG, GIF, WEBP / 최대 5MB / 최대 8개
-                      </p>
+                  <Label
+                    htmlFor="imageUpload"
+                    className={
+                      resizingImages ? "cursor-not-allowed" : "cursor-pointer"
+                    }
+                  >
+                    <div
+                      className={`border-2 border-dashed border-input rounded-lg p-6 text-center transition-colors ${
+                        resizingImages
+                          ? "bg-muted cursor-not-allowed"
+                          : "hover:border-primary"
+                      }`}
+                    >
+                      {resizingImages ? (
+                        <>
+                          <Loader2 className="mx-auto h-12 w-12 text-muted-foreground mb-2 animate-spin" />
+                          <p className="text-sm font-medium mb-1">
+                            이미지 처리 중... {resizeProgress}%
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            잠시만 기다려주세요
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-2" />
+                          <p className="text-sm font-medium mb-1">
+                            이미지 업로드
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            클릭하여 파일을 선택하거나 드래그하여 업로드
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            JPG, PNG, GIF, WEBP / 최대 8개
+                          </p>
+                        </>
+                      )}
                     </div>
                   </Label>
                   <Input
@@ -722,6 +784,7 @@ export default function ClassRegister() {
                     multiple
                     className="hidden"
                     onChange={handleImageSelect}
+                    disabled={resizingImages}
                   />
                 </div>
 

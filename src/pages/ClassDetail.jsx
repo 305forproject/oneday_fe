@@ -80,10 +80,7 @@ const ClassDetailPage = () => {
     if (classData && classData.latitude && classData.longitude) {
       // DOM이 렌더링된 후 지도 초기화
       setTimeout(() => {
-        initKakaoMap(
-          classData.latitude,
-          classData.longitude
-        );
+        initKakaoMap(classData.latitude, classData.longitude);
       }, 100);
     }
   }, [classData]);
@@ -252,7 +249,7 @@ const ClassDetailPage = () => {
           {/* Left Content */}
           <div className="lg:col-span-2 space-y-10">
             {/* Image Slider */}
-            <div className="relative w-full aspect-video bg-gray-100 rounded-2xl overflow-hidden group shadow-sm">
+            <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-2xl overflow-hidden group shadow-sm">
               {images.length > 0 ? (
                 <>
                   <img
