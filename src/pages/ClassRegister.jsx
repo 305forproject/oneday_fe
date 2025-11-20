@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Calendar } from "../components/ui/calendar";
 import {
@@ -28,34 +28,29 @@ import { Badge } from "../components/ui/badge";
 import { Plus, X, Loader2, CalendarIcon, Upload, Star } from "lucide-react";
 import { cn } from "../lib/utils";
 import createClass from "../service/class/createClass";
-
-// 카테고리 매핑 (한글 → 영문)
-// 백엔드 CategoryType Enum에 맞춘 매핑
-const CATEGORY_MAP = {
-  "건강/뷰티": "HEALTH_BEAUTY",
-  "공예/예술": "CRAFT_ART",
-  "스포츠/레저": "SPORTS_LEISURE",
-  "요리/베이킹": "COOKING_BAKING",
-  "음악/댄스": "MUSIC_DANCE",
-  "언어/교육": "LANGUAGE_EDUCATION",
-  "IT/기술": "IT_TECHNOLOGY",
-  라이프스타일: "LIFESTYLE",
-};
-
-const categories = [
-  "건강/뷰티",
-  "공예/예술",
-  "스포츠/레저",
-  "요리/베이킹",
-  "음악/댄스",
-  "언어/교육",
-  "IT/기술",
-  "라이프스타일",
-];
+import getCategories from "../service/class/getCategories";
 
 export default function ClassRegister() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  // 카테고리 데이터 (DB에서 가져옴)
+  const [categories, setCategories] = useState([]);
+
+  // 컴포넌트 마운트 시 카테고리 로딩
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const categoryData = await getCategories();
+        setCategories(categoryData);
+      } catch (error) {
+        console.error("카테고리 로딩 실패:", error);
+        alert("카테고리를 불러오는데 실패했습니다. 페이지를 새로고침해주세요.");
+      }
+    };
+
+    loadCategories();
+  }, []);
 
   // 폼 데이터
   const [formData, setFormData] = useState({
@@ -324,7 +319,7 @@ export default function ClassRegister() {
 
       // API 요청 데이터 생성
       const requestData = {
-        category: CATEGORY_MAP[formData.category],
+        category: formData.category, // DB에서 가져온 categoryType 사용
         className: formData.className.trim(),
         classDetail: formData.classDetail.trim() || null,
         curriculum: formData.curriculum.trim() || null,
@@ -401,14 +396,24 @@ export default function ClassRegister() {
                 <Select
                   value={formData.category}
                   onValueChange={handleCategoryChange}
+                  disabled={categories.length === 0}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="카테고리 선택" />
+                    <SelectValue
+                      placeholder={
+                        categories.length === 0
+                          ? "카테고리 로딩 중..."
+                          : "카테고리 선택"
+                      }
+                    />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat} value={cat}>
-                        {cat}
+                    {categories.map((cat, index) => (
+                      <SelectItem
+                        key={`${cat.categoryType}-${index}`}
+                        value={cat.categoryType}
+                      >
+                        {cat.categoryName}
                       </SelectItem>
                     ))}
                   </SelectContent>
