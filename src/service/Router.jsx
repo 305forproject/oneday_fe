@@ -12,7 +12,7 @@ import ClassDetail from "../pages/ClassDetail";
 import ClassRegister from "../pages/ClassRegister";
 import PaymentSuccessPage from "../pages/PaymentSuccessPage";
 import PaymentWidgetModal from "../features/payment/PaymentModal";
-// import MyPage from "../pages/MyPage";
+import MyReservations from "../pages/MyReservations";
 
 const Router = () => {
   return (
@@ -24,7 +24,7 @@ const Router = () => {
             <Route path="/" element={<Main />} />
             <Route path="/classes/:classId" element={<ClassDetail />} />
             <Route path="/register" element={<ClassRegister />} />
-            {/* <Route path="/my" element={<MyPage />} /> */}
+            <Route path="/my" element={<MyReservations />} />
           </Route>
 
           {/* 헤더/푸터가 없는 페이지  */}
