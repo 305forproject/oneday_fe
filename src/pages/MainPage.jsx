@@ -155,7 +155,7 @@ export default function App() {
 
         {/* --- Popular Classes Section --- */}
         <section className="mt-16">
-          <div className="mb-6 flex items-baseline justify-between">
+          {/* <div className="mb-6 flex items-baseline justify-between">
             <h2 className="text-3xl font-bold tracking-tight">인기 클래스</h2>
             <a
               href="#"
@@ -167,7 +167,7 @@ export default function App() {
                 className="ml-1 transition-transform group-hover:translate-x-1"
               />
             </a>
-          </div>
+          </div> */}
 
           {/* API 에러 표시 */}
           {apiError && (
