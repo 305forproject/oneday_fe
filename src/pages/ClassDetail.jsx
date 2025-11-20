@@ -82,8 +82,7 @@ const ClassDetailPage = () => {
       setTimeout(() => {
         initKakaoMap(
           classData.latitude,
-          classData.longitude,
-          classData.className
+          classData.longitude
         );
       }, 100);
     }

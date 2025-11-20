@@ -3,12 +3,11 @@
  */
 
 /**
- * Kakao Map을 초기화하고 마커와 인포윈도우를 표시합니다.
+ * Kakao Map을 초기화하고 마커를 표시합니다.
  * @param {string} latitude - 위도
  * @param {string} longitude - 경도
- * @param {string} className - 클래스 이름
  */
-export function initKakaoMap(latitude, longitude, className) {
+export function initKakaoMap(latitude, longitude) {
   if (!window.kakao || !window.kakao.maps) {
     console.error("Kakao Maps SDK가 로드되지 않았습니다.");
     displayMapError();
@@ -36,18 +35,17 @@ export function initKakaoMap(latitude, longitude, className) {
     };
 
     const map = new window.kakao.maps.Map(mapContainer, mapOption);
-    createMarker(map, lat, lng, className);
+    createMarker(map, lat, lng);
   });
 }
 
 /**
- * 마커와 인포윈도우를 생성합니다.
+ * 마커를 생성합니다.
  * @param {kakao.maps.Map} map - 카카오 지도 객체
  * @param {number} lat - 위도
  * @param {number} lng - 경도
- * @param {string} className - 클래스 이름
  */
-function createMarker(map, lat, lng, className) {
+function createMarker(map, lat, lng) {
   const markerPosition = new window.kakao.maps.LatLng(lat, lng);
 
   const marker = new window.kakao.maps.Marker({
@@ -55,43 +53,6 @@ function createMarker(map, lat, lng, className) {
   });
 
   marker.setMap(map);
-
-  const infowindow = new window.kakao.maps.InfoWindow({
-    content: getInfoWindowContent(className),
-  });
-
-  infowindow.open(map, marker);
-
-  window.kakao.maps.event.addListener(marker, "click", () => {
-    infowindow.open(map, marker);
-  });
-}
-
-/**
- * 인포윈도우 HTML 콘텐츠를 생성합니다.
- * @param {string} className - 클래스 이름
- * @returns {string} HTML 문자열
- */
-function getInfoWindowContent(className) {
-  return `<div style="padding:10px; font-size:14px; text-align:center; min-width:150px;">
-    <strong>${escapeHtml(className)}</strong>
-  </div>`;
-}
-
-/**
- * HTML 특수문자를 이스케이프 처리합니다.
- * @param {string} text - 이스케이프할 텍스트
- * @returns {string} 이스케이프된 텍스트
- */
-function escapeHtml(text) {
-  const map = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;",
-  };
-  return text.replace(/[&<>"']/g, (m) => map[m]);
 }
 
 /**
