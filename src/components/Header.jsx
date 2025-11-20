@@ -1,8 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-import { Calendar } from "lucide-react";
+import { Calendar, User, BookOpen, GraduationCap, LogOut } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import logoutAPI from "../service/auth/logout";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 export function Header() {
   const { isAuthenticated, logout } = useAuth();
@@ -31,28 +39,40 @@ export function Header() {
           <span className="text-xl font-bold">원데이클래스</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6">
-          {isAuthenticated() && (
-            <Link
-              to="/register"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              클래스 등록
-            </Link>
-          )}
-        </nav>
-
         {/* 로그인 상태에 따른 버튼 표시 */}
         <div className="flex items-center gap-2">
           {isAuthenticated() ? (
             <>
-              {/* 로그인 상태: 마이페이지 + 로그아웃 */}
-              <Button variant="ghost" size="sm" onClick={() => navigate("/my")}>
-                마이페이지
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleLogout}>
-                로그아웃
-              </Button>
+              {/* 로그인 상태: 드롭다운 메뉴 + 로그아웃 */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm">
+                    <User className="h-4 w-4 mr-2" />
+                    내 메뉴
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel>내 계정</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/my")}>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>마이페이지</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/register")}>
+                    <BookOpen className="mr-2 h-4 w-4" />
+                    <span>클래스 등록</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/teacher")}>
+                    <GraduationCap className="mr-2 h-4 w-4" />
+                    <span>강사 페이지</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>로그아웃</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           ) : (
             <>
