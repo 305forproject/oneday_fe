@@ -88,36 +88,43 @@ export default function App() {
     <div className="min-h-screen bg-background text-foreground font-sans">
       <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* --- Hero / Search Section --- */}
-        <section className="flex flex-col items-center text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-            새로운 취미를 시작하세요
-          </h1>
-          <p className="mt-4 max-w-xl text-lg text-muted-foreground">
-            다양한 원데이 클래스로 특별한 경험을 만들어보세요
-          </p>
+        <section className="relative overflow-hidden rounded-3xl bg-primary/5 px-6 py-24 text-center sm:px-16">
+          <div className="relative z-10 mx-auto max-w-3xl">
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              새로운 취미를 시작하세요
+            </h1>
+            <p className="mt-6 text-lg text-muted-foreground">
+              다양한 원데이 클래스로 일상에 특별한 경험을 더해보세요.
+              <br className="hidden sm:inline" /> 당신만의 취미가 기다리고 있습니다.
+            </p>
 
-          {/* 검색 바 */}
-          <form
-            onSubmit={handleSearchSubmit} // 이벤트 핸들러 변경
-            className="mt-8 flex w-full max-w-2xl items-center rounded-lg border border-border bg-card shadow-sm"
-          >
-            <div className="pl-5 pr-3 text-muted-foreground">
-              <Search size={20} />
-            </div>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)} // state에 검색어 반영
-              placeholder="클래스명, 강사명으로 찾아보세요"
-              className="h-14 flex-1 bg-transparent pr-4 text-base text-foreground placeholder-muted-foreground focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="m-2 shrink-0 rounded-md bg-primary px-6 py-3 text-base font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            {/* 검색 바 */}
+            <form
+              onSubmit={handleSearchSubmit}
+              className="mt-10 flex w-full items-center rounded-full border border-border bg-background shadow-lg transition-shadow hover:shadow-xl"
             >
-              검색
-            </button>
-          </form>
+              <div className="pl-6 pr-3 text-muted-foreground">
+                <Search size={22} />
+              </div>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="배우고 싶은 클래스나 강사님을 찾아보세요"
+                className="h-16 flex-1 bg-transparent pr-4 text-lg text-foreground placeholder-muted-foreground focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="m-1.5 shrink-0 rounded-full bg-primary px-8 py-3.5 text-base font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              >
+                검색
+              </button>
+            </form>
+          </div>
+          
+          {/* Decorative elements */}
+          <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
         </section>
 
         {/* --- Category Filter Section --- */}

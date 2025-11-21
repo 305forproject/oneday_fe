@@ -1,6 +1,7 @@
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-import { Calendar, User, BookOpen, GraduationCap, LogOut } from "lucide-react";
+import { Calendar, User, BookOpen, GraduationCap, LogOut, Sun, Moon } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import logoutAPI from "../service/auth/logout";
 import {
@@ -15,6 +16,15 @@ import {
 export function Header() {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
 
   /**
    * 로그아웃 핸들러
@@ -41,6 +51,15 @@ export function Header() {
 
         {/* 로그인 상태에 따른 버튼 표시 */}
         <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsDark(!isDark)}
+            className="mr-2"
+          >
+            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
+
           {isAuthenticated() ? (
             <>
               {/* 로그인 상태: 드롭다운 메뉴 + 로그아웃 */}
@@ -53,20 +72,26 @@ export function Header() {
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuLabel>내 계정</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate("/my")}>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>마이페이지</span>
+                  <DropdownMenuItem asChild>
+                    <Link to="/my" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>마이페이지</span>
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/register")}>
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    <span>클래스 등록</span>
+                  <DropdownMenuItem asChild>
+                    <Link to="/register" className="cursor-pointer">
+                      <BookOpen className="mr-2 h-4 w-4" />
+                      <span>클래스 등록</span>
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/teacher")}>
-                    <GraduationCap className="mr-2 h-4 w-4" />
-                    <span>강사 페이지</span>
+                  <DropdownMenuItem asChild>
+                    <Link to="/teacher" className="cursor-pointer">
+                      <GraduationCap className="mr-2 h-4 w-4" />
+                      <span>강사 페이지</span>
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>로그아웃</span>
                   </DropdownMenuItem>
@@ -79,12 +104,12 @@ export function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate("/login")}
+                asChild
               >
-                로그인
+                <Link to="/login">로그인</Link>
               </Button>
-              <Button size="sm" onClick={() => navigate("/signup")}>
-                회원가입
+              <Button size="sm" asChild>
+                <Link to="/signup">회원가입</Link>
               </Button>
             </>
           )}

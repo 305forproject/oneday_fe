@@ -393,25 +393,25 @@ export default function ClassRegister() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">클래스 등록</h1>
-          <p className="text-muted-foreground">
+    <div className="min-h-screen bg-muted/30">
+      <div className="container mx-auto px-4 py-12 max-w-4xl">
+        <div className="mb-10 text-center">
+          <h1 className="text-4xl font-extrabold mb-3 text-foreground">클래스 등록</h1>
+          <p className="text-lg text-muted-foreground">
             새로운 원데이 클래스를 등록하고 학생들과 만나보세요
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {/* 기본 정보 */}
-          <Card>
+          <Card className="border-border/50 shadow-sm">
             <CardHeader>
               <CardTitle>기본 정보</CardTitle>
               <CardDescription>
                 클래스의 기본 정보를 입력해주세요
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="className">클래스 제목</Label>
                 <Input
@@ -419,6 +419,7 @@ export default function ClassRegister() {
                   placeholder="예: 초보자를 위한 베이킹 클래스"
                   value={formData.className}
                   onChange={handleInputChange}
+                  className="h-11"
                 />
               </div>
 
@@ -429,7 +430,7 @@ export default function ClassRegister() {
                   onValueChange={handleCategoryChange}
                   disabled={categories.length === 0}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-11">
                     <SelectValue
                       placeholder={
                         categories.length === 0
@@ -463,13 +464,13 @@ export default function ClassRegister() {
                 <Textarea
                   id="classDetail"
                   placeholder="클래스에 대해 자세히 설명해주세요"
-                  className="min-h-32"
+                  className="min-h-32 resize-none"
                   value={formData.classDetail}
                   onChange={handleInputChange}
                 />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="maxCapacity">최대 정원</Label>
                   <Input
@@ -479,6 +480,7 @@ export default function ClassRegister() {
                     min="1"
                     value={formData.maxCapacity}
                     onChange={handleInputChange}
+                    className="h-11"
                   />
                 </div>
                 <div className="space-y-2">
@@ -490,6 +492,7 @@ export default function ClassRegister() {
                     min="0"
                     value={formData.price}
                     onChange={handleInputChange}
+                    className="h-11"
                   />
                 </div>
               </div>
@@ -502,13 +505,13 @@ export default function ClassRegister() {
                     placeholder="우편번호"
                     value={formData.zipcode}
                     readOnly
-                    className="flex-1 cursor-not-allowed bg-muted"
+                    className="flex-1 cursor-not-allowed bg-muted h-11"
                   />
                   <Button
                     type="button"
                     variant="outline"
                     onClick={searchAddress}
-                    className="flex-shrink-0"
+                    className="flex-shrink-0 h-11"
                   >
                     📍 주소 검색
                   </Button>
@@ -522,7 +525,7 @@ export default function ClassRegister() {
                   placeholder="주소 검색 버튼을 클릭하세요"
                   value={formData.location}
                   readOnly
-                  className="cursor-not-allowed bg-muted"
+                  className="cursor-not-allowed bg-muted h-11"
                 />
               </div>
 
@@ -533,26 +536,27 @@ export default function ClassRegister() {
                   placeholder="상세 주소를 입력하세요 (예: 3층 301호)"
                   value={formData.detailLocation}
                   onChange={handleInputChange}
+                  className="h-11"
                 />
               </div>
             </CardContent>
           </Card>
 
           {/* 커리큘럼 */}
-          <Card>
+          <Card className="border-border/50 shadow-sm">
             <CardHeader>
               <CardTitle>커리큘럼</CardTitle>
               <CardDescription>
                 클래스에서 진행할 내용을 단계별로 작성해주세요
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="curriculum">커리큘럼 (한 줄에 하나씩)</Label>
                 <Textarea
                   id="curriculum"
                   placeholder="1. 재료 준비 및 계량하기&#10;2. 반죽 만들기&#10;3. 오븐에 굽기"
-                  className="min-h-32"
+                  className="min-h-32 resize-none"
                   value={formData.curriculum}
                   onChange={handleInputChange}
                 />
@@ -563,7 +567,7 @@ export default function ClassRegister() {
                 <Textarea
                   id="included"
                   placeholder="재료비 포함&#10;앞치마 제공&#10;레시피 제공"
-                  className="min-h-24"
+                  className="min-h-24 resize-none"
                   value={formData.included}
                   onChange={handleInputChange}
                 />
@@ -574,7 +578,7 @@ export default function ClassRegister() {
                 <Textarea
                   id="required"
                   placeholder="편한 복장&#10;긴 머리는 묶어주세요"
-                  className="min-h-24"
+                  className="min-h-24 resize-none"
                   value={formData.required}
                   onChange={handleInputChange}
                 />
@@ -583,15 +587,15 @@ export default function ClassRegister() {
           </Card>
 
           {/* 일정 설정 */}
-          <Card>
+          <Card className="border-border/50 shadow-sm">
             <CardHeader>
               <CardTitle>일정 설정</CardTitle>
               <CardDescription>
                 클래스를 진행할 날짜와 시간을 추가해주세요
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid md:grid-cols-4 gap-4">
+            <CardContent className="space-y-6">
+              <div className="grid md:grid-cols-4 gap-6">
                 <div className="md:col-span-2 space-y-2">
                   <Label className="block mb-2">날짜 선택</Label>
                   <Popover>
@@ -600,7 +604,7 @@ export default function ClassRegister() {
                         type="button"
                         variant="outline"
                         className={cn(
-                          "w-full justify-start text-left font-normal",
+                          "w-full justify-start text-left font-normal h-11",
                           !selectedDates.length && "text-muted-foreground"
                         )}
                       >
@@ -638,6 +642,7 @@ export default function ClassRegister() {
                         fullWidth: true,
                         variant: "outlined",
                         size: "small",
+                        className: "h-11"
                       },
                     }}
                   />
@@ -656,6 +661,7 @@ export default function ClassRegister() {
                         fullWidth: true,
                         variant: "outlined",
                         size: "small",
+                        className: "h-11"
                       },
                     }}
                   />
@@ -665,7 +671,7 @@ export default function ClassRegister() {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full bg-transparent"
+                className="w-full bg-background hover:bg-muted h-11 border-dashed"
                 onClick={addTimeSlot}
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -673,17 +679,17 @@ export default function ClassRegister() {
               </Button>
 
               {timeSlots.length > 0 && (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label>추가된 일정</Label>
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {timeSlots.map((slot, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between p-3 border rounded-lg"
+                        className="flex items-center justify-between p-3 border rounded-lg bg-muted/20"
                       >
-                        <div className="flex items-center gap-4">
-                          <Badge variant="outline">{slot.date}</Badge>
-                          <span className="text-sm">
+                        <div className="flex items-center gap-3">
+                          <Badge variant="outline" className="bg-background">{slot.date}</Badge>
+                          <span className="text-sm font-medium">
                             {slot.startTime} ~ {slot.endTime}
                           </span>
                         </div>
@@ -692,7 +698,7 @@ export default function ClassRegister() {
                           variant="ghost"
                           size="sm"
                           onClick={() => removeTimeSlot(index)}
-                          className="h-8 w-8 p-0"
+                          className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -705,7 +711,7 @@ export default function ClassRegister() {
           </Card>
 
           {/* 클래스 이미지 */}
-          <Card>
+          <Card className="border-border/50 shadow-sm">
             <CardHeader>
               <CardTitle>클래스 이미지</CardTitle>
               <CardDescription>
@@ -714,24 +720,23 @@ export default function ClassRegister() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {/* 권장 사양 안내 */}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h4 className="text-sm font-semibold text-blue-900 mb-2">
-                    📸 이미지 권장 사양
+                <div className="bg-blue-500/5 border border-blue-500/20 rounded-xl p-5">
+                  <h4 className="text-sm font-bold text-blue-600 mb-3 flex items-center">
+                    <div className="bg-blue-100 p-1 rounded-full mr-2">
+                      <Upload size={12} className="text-blue-600" />
+                    </div>
+                    이미지 권장 사양
                   </h4>
-                  <ul className="text-xs text-blue-700 space-y-1">
-                    <li>• 권장 크기: 1200x900px 이상</li>
+                  <ul className="text-xs text-blue-600/80 space-y-1.5 ml-1">
+                    <li>• 권장 크기: 1200x900px 이상 (4:3 비율)</li>
                     <li>• 최소 크기: 800x600px</li>
-                    <li>• 최대 크기: 1600x1600px</li>
                     <li>• 파일 형식: JPG, PNG, GIF, WEBP</li>
                     <li>• 최대 파일 크기: 5MB (업로드 전)</li>
-                    <li className="text-green-700 font-medium mt-2">
-                      ✨ 원본 비율을 유지하며 자동 최적화됩니다 (최대 2MB)
-                    </li>
-                    <li className="text-gray-600 text-[11px] mt-1">
-                      화면에 표시 시 4:3 컨테이너에 맞춰 여백이 추가될 수
-                      있습니다
+                    <li className="text-blue-700 font-medium mt-2 flex items-center">
+                      <Star size={10} className="mr-1 fill-current" />
+                      원본 비율을 유지하며 자동 최적화됩니다 (최대 2MB)
                     </li>
                   </ul>
                 </div>
@@ -745,16 +750,16 @@ export default function ClassRegister() {
                     }
                   >
                     <div
-                      className={`border-2 border-dashed border-input rounded-lg p-6 text-center transition-colors ${
+                      className={`border-2 border-dashed border-border rounded-xl p-10 text-center transition-all duration-200 ${
                         resizingImages
                           ? "bg-muted cursor-not-allowed"
-                          : "hover:border-primary"
+                          : "hover:border-primary hover:bg-primary/5"
                       }`}
                     >
                       {resizingImages ? (
                         <>
-                          <Loader2 className="mx-auto h-12 w-12 text-muted-foreground mb-2 animate-spin" />
-                          <p className="text-sm font-medium mb-1">
+                          <Loader2 className="mx-auto h-12 w-12 text-primary mb-4 animate-spin" />
+                          <p className="text-sm font-bold mb-1">
                             이미지 처리 중... {resizeProgress}%
                           </p>
                           <p className="text-xs text-muted-foreground">
@@ -763,14 +768,16 @@ export default function ClassRegister() {
                         </>
                       ) : (
                         <>
-                          <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-2" />
-                          <p className="text-sm font-medium mb-1">
+                          <div className="bg-muted rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                            <Upload className="h-8 w-8 text-muted-foreground" />
+                          </div>
+                          <p className="text-base font-bold mb-1">
                             이미지 업로드
                           </p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-sm text-muted-foreground mb-2">
                             클릭하여 파일을 선택하거나 드래그하여 업로드
                           </p>
-                          <p className="text-xs text-muted-foreground mt-1">
+                          <p className="text-xs text-muted-foreground/70">
                             JPG, PNG, GIF, WEBP / 최대 8개
                           </p>
                         </>

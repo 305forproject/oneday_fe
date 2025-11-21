@@ -61,24 +61,24 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">OneDay</h1>
+    <div className="min-h-screen bg-muted/30 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-[400px] space-y-6">
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight text-primary">OneDay</h1>
           <p className="text-muted-foreground">
             회원가입하고 원데이 클래스를 시작하세요
           </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>회원가입</CardTitle>
-            <CardDescription>계정 정보를 입력해주세요</CardDescription>
+        <Card className="border-border/50 shadow-lg">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold text-center">회원가입</CardTitle>
+            <CardDescription className="text-center">계정 정보를 입력해주세요</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <div className="flex items-center gap-2 p-3 rounded-md bg-destructive/10 text-destructive text-sm">
+                <div className="flex items-center gap-2 p-3 rounded-md bg-destructive/10 text-destructive text-sm font-medium animate-in fade-in slide-in-from-top-1">
                   <AlertCircle className="h-4 w-4 flex-shrink-0" />
                   <span>{error}</span>
                 </div>
@@ -93,6 +93,7 @@ export default function SignupPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   disabled={loading}
+                  className="h-11"
                 />
               </div>
 
@@ -106,6 +107,7 @@ export default function SignupPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
                   autoComplete="email"
+                  className="h-11"
                 />
               </div>
 
@@ -119,6 +121,7 @@ export default function SignupPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
                   autoComplete="new-password"
+                  className="h-11"
                 />
               </div>
 
@@ -132,10 +135,11 @@ export default function SignupPage() {
                   onChange={(e) => setPasswordConfirm(e.target.value)}
                   disabled={loading}
                   autoComplete="new-password"
+                  className="h-11"
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full h-11 text-base font-semibold" disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -147,19 +151,19 @@ export default function SignupPage() {
               </Button>
             </form>
 
-            <div className="mt-4 text-center text-sm text-muted-foreground">
+            <div className="mt-6 text-center text-sm text-muted-foreground">
               이미 계정이 있으신가요?{" "}
-              <Link to="/login" className="text-primary hover:underline">
+              <Link to="/login" className="text-primary font-semibold hover:underline">
                 로그인
               </Link>
             </div>
           </CardContent>
         </Card>
 
-        <div className="mt-4 text-center">
+        <div className="text-center">
           <Link
             to="/"
-            className="text-sm text-muted-foreground hover:text-foreground"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             메인 페이지로 돌아가기
           </Link>
