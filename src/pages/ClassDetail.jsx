@@ -12,7 +12,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import getClassDetail from "../service/class/getClassDetail";
-import AiAdvisorSection from "../features/class/AIAdvisor";
+import AiAdvisorSection from "../features/class/AiAdvisor";
 import PaymentWidgetModal from "../features/payment/PaymentModal";
 import { initKakaoMap } from "../utils/kakaoMap";
 
@@ -231,8 +231,7 @@ const ClassDetailPage = () => {
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
             다시 시도
           </button>
         </div>
@@ -268,8 +267,7 @@ const ClassDetailPage = () => {
                           e.stopPropagation();
                           prevImage();
                         }}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
+                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
                         <ChevronLeft size={24} />
                       </button>
                       <button
@@ -277,8 +275,7 @@ const ClassDetailPage = () => {
                           e.stopPropagation();
                           nextImage();
                         }}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
+                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
                         <ChevronRight size={24} />
                       </button>
                       <div className="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-3 py-1 rounded-full">
@@ -340,7 +337,7 @@ const ClassDetailPage = () => {
                   <p className="font-bold text-gray-900 text-lg">
                     {classData.teacherName}
                   </p>
-                  <p className="text-sm text-gray-500 mt-0.5">전문 강사</p>
+                  {/* <p className="text-sm text-gray-500 mt-0.5">전문 강사</p> */}
                 </div>
               </div>
             </div>
@@ -349,8 +346,7 @@ const ClassDetailPage = () => {
             <div>
               <h3
                 onClick={handleTitleClick}
-                className="text-lg font-bold text-gray-900 mb-5 cursor-pointer select-none active:text-gray-600 transition-colors"
-              >
+                className="text-lg font-bold text-gray-900 mb-5 cursor-pointer select-none active:text-gray-600 transition-colors">
                 클래스 소개
               </h3>
 
@@ -396,8 +392,7 @@ const ClassDetailPage = () => {
               <h3 className="text-lg font-bold text-gray-900 mb-4">위치</h3>
               <div
                 id="map"
-                className="w-full h-64 bg-gray-100 rounded-xl border border-gray-200"
-              ></div>
+                className="w-full h-64 bg-gray-100 rounded-xl border border-gray-200"></div>
               <p className="text-sm text-gray-600 mt-3 flex items-center">
                 <MapPin size={16} className="mr-1.5 text-gray-400" />
                 {classData.location}
@@ -433,15 +428,13 @@ const ClassDetailPage = () => {
                           selectedDate === item.date
                             ? "bg-gray-900 text-white border-gray-900"
                             : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
-                        }`}
-                      >
+                        }`}>
                         <span
                           className={`text-xs mb-1 ${
                             selectedDate === item.date
                               ? "text-gray-300"
                               : "text-gray-400"
-                          }`}
-                        >
+                          }`}>
                           {item.day}
                         </span>
                         <span className="font-bold text-sm">
@@ -476,8 +469,7 @@ const ClassDetailPage = () => {
                             : timeInfo.isPast
                             ? "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed" // [수정됨] 지난 시간 스타일
                             : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50 cursor-pointer"
-                        }`}
-                      >
+                        }`}>
                         {timeInfo.timeStr}
                       </button>
                     ))}
@@ -496,8 +488,7 @@ const ClassDetailPage = () => {
                     : "bg-gray-100 text-gray-400 cursor-not-allowed"
                 }`}
                 disabled={!selectedDate || !selectedScheduleId}
-                onClick={handleReserveClick}
-              >
+                onClick={handleReserveClick}>
                 예약하기
               </button>
             </div>

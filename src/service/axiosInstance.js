@@ -2,7 +2,7 @@ import axios from "axios";
 import refreshTokenAPI from "./auth/refreshToken";
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost:8080/api", // 백엔드 주소
+  baseURL: "/api", // 백엔드 주소
   headers: {
     "Content-Type": "application/json",
   },
