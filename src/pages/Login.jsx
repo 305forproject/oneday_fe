@@ -80,27 +80,29 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-muted/30 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-[400px] space-y-6">
         {/* 로고 및 타이틀 */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">OneDay</h1>
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight text-primary">OneDay</h1>
           <p className="text-muted-foreground">
             로그인하여 원데이 클래스를 시작하세요
           </p>
         </div>
 
         {/* 로그인 카드 */}
-        <Card>
-          <CardHeader>
-            <CardTitle>로그인</CardTitle>
-            <CardDescription>이메일과 비밀번호를 입력해주세요</CardDescription>
+        <Card className="border-border/50 shadow-lg">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold text-center">로그인</CardTitle>
+            <CardDescription className="text-center">
+              이메일과 비밀번호를 입력해주세요
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* 에러 메시지 */}
               {error && (
-                <div className="flex items-center gap-2 p-3 rounded-md bg-destructive/10 text-destructive text-sm">
+                <div className="flex items-center gap-2 p-3 rounded-md bg-destructive/10 text-destructive text-sm font-medium animate-in fade-in slide-in-from-top-1">
                   <AlertCircle className="h-4 w-4 flex-shrink-0" />
                   <span>{error}</span>
                 </div>
@@ -117,12 +119,21 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
                   autoComplete="email"
+                  className="h-11"
                 />
               </div>
 
               {/* 비밀번호 입력 */}
               <div className="space-y-2">
-                <Label htmlFor="password">비밀번호</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">비밀번호</Label>
+                  {/* <Link
+                    to="/forgot-password"
+                    className="text-xs text-primary hover:underline"
+                  >
+                    비밀번호를 잊으셨나요?
+                  </Link> */}
+                </div>
                 <Input
                   id="password"
                   type="password"
@@ -131,11 +142,12 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
                   autoComplete="current-password"
+                  className="h-11"
                 />
               </div>
 
               {/* 로그인 버튼 */}
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full h-11 text-base font-semibold" disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -147,10 +159,10 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            {/* 회원가입 링크 (추후 구현) */}
-            <div className="mt-4 text-center text-sm text-muted-foreground">
+            {/* 회원가입 링크 */}
+            <div className="mt-6 text-center text-sm text-muted-foreground">
               아직 계정이 없으신가요?{" "}
-              <Link to="/signup" className="text-primary hover:underline">
+              <Link to="/signup" className="text-primary font-semibold hover:underline">
                 회원가입
               </Link>
             </div>
@@ -158,10 +170,10 @@ export default function LoginPage() {
         </Card>
 
         {/* 메인으로 돌아가기 링크 */}
-        <div className="mt-4 text-center">
+        <div className="text-center">
           <Link
             to="/"
-            className="text-sm text-muted-foreground hover:text-foreground"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             메인 페이지로 돌아가기
           </Link>
