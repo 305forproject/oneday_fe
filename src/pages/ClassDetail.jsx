@@ -256,10 +256,10 @@ const ClassDetailPage = () => {
                     src={images[currentImageIndex]}
                     alt={`Class view ${currentImageIndex + 1}`}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                    // onError={(e) => {
-                    //   e.target.src =
-                    //     "https://via.placeholder.com/800x500?text=No+Image";
-                    // }}
+                    onError={(e) => {
+                      e.target.src =
+                        "https://via.placeholder.com/800x500?text=No+Image";
+                    }}
                   />
                   {images.length > 1 && (
                     <>
@@ -340,7 +340,7 @@ const ClassDetailPage = () => {
                   <p className="font-bold text-gray-900 text-lg">
                     {classData.teacherName}
                   </p>
-                  <p className="text-sm text-gray-500 mt-0.5">전문 강사</p>
+                  {/* <p className="text-sm text-gray-500 mt-0.5">전문 강사</p> */}
                 </div>
               </div>
             </div>
