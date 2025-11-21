@@ -23,13 +23,13 @@ export function ClassCard({ classInfo }) {
       onClick={navigate}
       className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+      <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
         <img
           // 3. image -> representativeImageUrl로 변경
           src={representativeImageUrl || "/placeholder.svg"}
           // 4. title -> className으로 변경
           alt={className}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
         />
         <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground">
           {/* 5. category -> categoryName으로 변경 */}

@@ -243,13 +243,13 @@ const ClassDetailPage = () => {
   const images = classData.imageUrls || [];
 
   return (
-    <div className="bg-white min-h-screen pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <div className="bg-background min-h-screen pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Left Content */}
-          <div className="lg:col-span-2 space-y-10">
+          <div className="lg:col-span-2 space-y-12">
             {/* Image Slider */}
-            <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-2xl overflow-hidden group shadow-sm">
+            <div className="relative w-full aspect-[4/3] bg-muted rounded-3xl overflow-hidden group shadow-sm">
               {images.length > 0 ? (
                 <>
                   <img
@@ -268,7 +268,7 @@ const ClassDetailPage = () => {
                           e.stopPropagation();
                           prevImage();
                         }}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
                       >
                         <ChevronLeft size={24} />
                       </button>
@@ -277,23 +277,23 @@ const ClassDetailPage = () => {
                           e.stopPropagation();
                           nextImage();
                         }}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
                       >
                         <ChevronRight size={24} />
                       </button>
-                      <div className="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-3 py-1 rounded-full">
+                      <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white text-xs font-medium px-3 py-1.5 rounded-full">
                         {currentImageIndex + 1} / {images.length}
                       </div>
                     </>
                   )}
                 </>
               ) : (
-                <div className="flex flex-col items-center justify-center w-full h-full text-gray-400">
+                <div className="flex flex-col items-center justify-center w-full h-full text-muted-foreground">
                   <span>이미지가 없습니다.</span>
                 </div>
               )}
               {classData.categoryName && (
-                <span className="absolute top-4 left-4 bg-gray-900 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
+                <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
                   {classData.categoryName}
                 </span>
               )}
@@ -301,43 +301,43 @@ const ClassDetailPage = () => {
 
             {/* Class Info */}
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
+              <h1 className="text-4xl font-extrabold text-foreground mb-6 leading-tight">
                 {classData.className}
               </h1>
-              <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-sm text-gray-500">
-                <div className="flex items-center text-yellow-500 font-medium bg-yellow-50 px-2 py-1 rounded">
-                  <Star size={16} className="fill-current mr-1" />
+              <div className="flex flex-wrap items-center gap-y-3 gap-x-6 text-sm text-muted-foreground">
+                <div className="flex items-center text-yellow-500 font-medium bg-yellow-500/10 px-2.5 py-1 rounded-md">
+                  <Star size={16} className="fill-current mr-1.5" />
                   4.8{" "}
-                  <span className="text-gray-400 font-normal ml-1">(127)</span>
+                  <span className="text-muted-foreground font-normal ml-1.5">(127)</span>
                 </div>
                 <div className="flex items-center">
-                  <MapPin size={16} className="mr-1.5 text-gray-400" />
+                  <MapPin size={18} className="mr-2 text-muted-foreground/70" />
                   {classData.location}
                 </div>
                 <div className="flex items-center">
-                  <Clock size={16} className="mr-1.5 text-gray-400" />
+                  <Clock size={18} className="mr-2 text-muted-foreground/70" />
                   {classDuration}
                 </div>
                 <div className="flex items-center">
-                  <User size={16} className="mr-1.5 text-gray-400" />
+                  <User size={18} className="mr-2 text-muted-foreground/70" />
                   최대 {classData.maxCapacity}명
                 </div>
               </div>
             </div>
 
-            <hr className="border-gray-100" />
+            <hr className="border-border" />
 
             {/* Teacher */}
             <div>
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
+              <h3 className="text-xl font-bold text-foreground mb-6">
                 강사 소개
               </h3>
-              <div className="flex items-center p-5 bg-gray-50 rounded-xl border border-gray-100">
-                <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center text-xl font-bold text-gray-600 mr-4">
+              <div className="flex items-center p-6 bg-muted/30 rounded-2xl border border-border/50">
+                <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-2xl font-bold text-muted-foreground mr-5 border border-border">
                   {classData.teacherName ? classData.teacherName[0] : "T"}
                 </div>
                 <div>
-                  <p className="font-bold text-gray-900 text-lg">
+                  <p className="font-bold text-foreground text-lg">
                     {classData.teacherName}
                   </p>
                   {/* <p className="text-sm text-gray-500 mt-0.5">전문 강사</p> */}
@@ -349,13 +349,13 @@ const ClassDetailPage = () => {
             <div>
               <h3
                 onClick={handleTitleClick}
-                className="text-lg font-bold text-gray-900 mb-5 cursor-pointer select-none active:text-gray-600 transition-colors"
+                className="text-xl font-bold text-foreground mb-6 cursor-pointer select-none active:text-muted-foreground transition-colors"
               >
                 클래스 소개
               </h3>
 
-              <div className="bg-gray-50 p-6 rounded-2xl mb-6 border border-gray-100">
-                <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-line">
+              <div className="bg-muted/30 p-8 rounded-3xl mb-8 border border-border/50">
+                <p className="text-foreground leading-relaxed text-lg whitespace-pre-line">
                   {classData.classDetail}
                 </p>
               </div>
@@ -368,22 +368,22 @@ const ClassDetailPage = () => {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-gray-900 mb-4">커리큘럼</h3>
-              <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
+              <h3 className="text-xl font-bold text-foreground mb-6">커리큘럼</h3>
+              <div className="bg-muted/30 p-8 rounded-2xl border border-border/50">
                 {renderTextList(classData.curriculum, "number")}
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-green-50/50 p-6 rounded-xl border border-green-100">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+              <div className="bg-green-500/5 p-6 rounded-2xl border border-green-500/20">
+                <h3 className="text-lg font-bold text-foreground mb-4 flex items-center">
                   <CheckCircle size={20} className="mr-2 text-green-600" />
                   포함 사항
                 </h3>
                 {renderTextList(classData.included, "dot")}
               </div>
-              <div className="bg-orange-50/50 p-6 rounded-xl border border-orange-100">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+              <div className="bg-orange-500/5 p-6 rounded-2xl border border-orange-500/20">
+                <h3 className="text-lg font-bold text-foreground mb-4 flex items-center">
                   <AlertCircle size={20} className="mr-2 text-orange-500" />
                   준비물
                 </h3>
@@ -393,13 +393,13 @@ const ClassDetailPage = () => {
 
             {/* Kakao Map */}
             <div>
-              <h3 className="text-lg font-bold text-gray-900 mb-4">위치</h3>
+              <h3 className="text-xl font-bold text-foreground mb-6">위치</h3>
               <div
                 id="map"
-                className="w-full h-64 bg-gray-100 rounded-xl border border-gray-200"
+                className="w-full h-80 bg-muted rounded-2xl border border-border overflow-hidden"
               ></div>
-              <p className="text-sm text-gray-600 mt-3 flex items-center">
-                <MapPin size={16} className="mr-1.5 text-gray-400" />
+              <p className="text-sm text-muted-foreground mt-3 flex items-center">
+                <MapPin size={16} className="mr-1.5 text-muted-foreground/70" />
                 {classData.location}
               </p>
             </div>
@@ -407,17 +407,18 @@ const ClassDetailPage = () => {
 
           {/* Right Booking Widget */}
           <div className="lg:col-span-1">
-            <div className="sticky top-8 bg-white border border-gray-200 rounded-2xl shadow-lg p-6">
-              <div className="flex justify-between items-baseline mb-6 border-b border-gray-100 pb-6">
-                <span className="text-2xl font-bold text-gray-900">
-                  {classData.price?.toLocaleString()}원
+            <div className="sticky top-24 bg-card border border-border rounded-3xl shadow-xl p-6 sm:p-8">
+              <div className="flex justify-between items-baseline mb-8 border-b border-border pb-6">
+                <span className="text-3xl font-extrabold text-primary">
+                  {classData.price?.toLocaleString()}
+                  <span className="text-lg font-medium text-muted-foreground ml-1">원</span>
                 </span>
-                <span className="text-gray-400 text-sm">/ 1인</span>
+                <span className="text-muted-foreground text-sm">/ 1인</span>
               </div>
 
               {/* Date Select */}
-              <div className="mb-6">
-                <h4 className="text-sm font-bold text-gray-900 mb-3">
+              <div className="mb-8">
+                <h4 className="text-sm font-bold text-foreground mb-4">
                   날짜 선택
                 </h4>
                 {uniqueDates.length > 0 ? (
@@ -429,17 +430,17 @@ const ClassDetailPage = () => {
                           setSelectedDate(item.date);
                           setSelectedScheduleId(null);
                         }}
-                        className={`flex flex-col items-center py-2 px-1 rounded-lg border transition-all ${
+                        className={`flex flex-col items-center py-3 px-1 rounded-xl border transition-all ${
                           selectedDate === item.date
-                            ? "bg-gray-900 text-white border-gray-900"
-                            : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
+                            ? "bg-primary text-primary-foreground border-primary shadow-md scale-105"
+                            : "bg-background text-muted-foreground border-border hover:bg-muted hover:border-primary/50"
                         }`}
                       >
                         <span
                           className={`text-xs mb-1 ${
                             selectedDate === item.date
-                              ? "text-gray-300"
-                              : "text-gray-400"
+                              ? "text-primary-foreground/80"
+                              : "text-muted-foreground/70"
                           }`}
                         >
                           {item.day}
@@ -451,31 +452,31 @@ const ClassDetailPage = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     예약 가능한 날짜가 없습니다.
                   </p>
                 )}
               </div>
 
               {/* Time Select */}
-              <div className="mb-8">
-                <h4 className="text-sm font-bold text-gray-900 mb-3">
+              <div className="mb-10">
+                <h4 className="text-sm font-bold text-foreground mb-4">
                   시간 선택
                 </h4>
                 {availableTimes.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-3">
                     {availableTimes.map((timeInfo) => (
                       <button
                         key={timeInfo.timeId}
                         // [수정됨] 지난 시간일 경우 disabled 처리
                         disabled={timeInfo.isPast}
                         onClick={() => setSelectedScheduleId(timeInfo.timeId)}
-                        className={`py-3 px-4 rounded-lg text-sm font-medium border transition-all ${
+                        className={`py-3.5 px-4 rounded-xl text-sm font-medium border transition-all ${
                           selectedScheduleId === timeInfo.timeId
-                            ? "bg-gray-900 text-white border-gray-900"
+                            ? "bg-primary text-primary-foreground border-primary shadow-md"
                             : timeInfo.isPast
-                            ? "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed" // [수정됨] 지난 시간 스타일
-                            : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50 cursor-pointer"
+                            ? "bg-muted text-muted-foreground/50 border-border cursor-not-allowed" // [수정됨] 지난 시간 스타일
+                            : "bg-background text-foreground border-border hover:bg-muted hover:border-primary/50 cursor-pointer"
                         }`}
                       >
                         {timeInfo.timeStr}
@@ -483,17 +484,17 @@ const ClassDetailPage = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-400 text-center py-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-muted-foreground text-center py-6 bg-muted/50 rounded-xl border border-border/50">
                     날짜를 먼저 선택해주세요
                   </p>
                 )}
               </div>
 
               <button
-                className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
+                className={`w-full py-4 rounded-xl font-bold text-lg transition-all shadow-lg ${
                   selectedDate && selectedScheduleId
-                    ? "bg-gray-900 text-white shadow-lg hover:bg-black"
-                    : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-[1.02]"
+                    : "bg-muted text-muted-foreground cursor-not-allowed shadow-none"
                 }`}
                 disabled={!selectedDate || !selectedScheduleId}
                 onClick={handleReserveClick}
