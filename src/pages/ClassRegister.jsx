@@ -42,7 +42,7 @@ import { Plus, X, Loader2, CalendarIcon, Upload, Star } from "lucide-react";
 import { cn } from "../lib/utils";
 import createClass from "../service/class/createClass";
 import getCategories from "../service/class/getCategories";
-import { resizeImage, getImageConfig } from "../utils/imageResizer";
+import { resizeImage } from "../utils/imageResizer";
 
 export default function ClassRegister() {
   const navigate = useNavigate();
@@ -226,9 +226,9 @@ export default function ClassRegister() {
     // 파일 크기 및 형식 검증
     const validFiles = [];
     for (const file of files) {
-      // 10MB 제한 (리사이징 전 원본 크기)
-      if (file.size > 10 * 1024 * 1024) {
-        alert(`${file.name}은(는) 10MB를 초과합니다`);
+      // 5MB 제한 (리사이징 전 원본 크기)
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`${file.name}은(는) 5MB를 초과합니다`);
         continue;
       }
 
@@ -721,12 +721,17 @@ export default function ClassRegister() {
                     📸 이미지 권장 사양
                   </h4>
                   <ul className="text-xs text-blue-700 space-y-1">
-                    <li>• 비율: 4:3 (가로:세로)</li>
-                    <li>• 권장 크기: 1200x900px</li>
+                    <li>• 권장 크기: 1200x900px 이상</li>
                     <li>• 최소 크기: 800x600px</li>
+                    <li>• 최대 크기: 1600x1600px</li>
                     <li>• 파일 형식: JPG, PNG, GIF, WEBP</li>
+                    <li>• 최대 파일 크기: 5MB (업로드 전)</li>
                     <li className="text-green-700 font-medium mt-2">
-                      ✨ 업로드 시 자동으로 4:3 비율로 조정됩니다
+                      ✨ 원본 비율을 유지하며 자동 최적화됩니다 (최대 2MB)
+                    </li>
+                    <li className="text-gray-600 text-[11px] mt-1">
+                      화면에 표시 시 4:3 컨테이너에 맞춰 여백이 추가될 수
+                      있습니다
                     </li>
                   </ul>
                 </div>
