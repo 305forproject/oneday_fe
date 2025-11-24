@@ -80,7 +80,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12 font-sans">
       <div className="w-full max-w-[400px] space-y-6">
         {/* 로고 및 타이틀 */}
         <div className="text-center space-y-2">

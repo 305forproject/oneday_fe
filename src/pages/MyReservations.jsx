@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../service/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { Calendar, User } from "lucide-react";
 
 const MyReservations = () => {
   const [user, setUser] = useState(null);
@@ -121,29 +122,31 @@ const MyReservations = () => {
   if (loading) return <div className="p-8 text-center">로딩 중...</div>;
 
   return (
-    // 1. 전체 배경을 흰색(bg-white)으로 변경
-    <div className="max-w-4xl mx-auto p-6 bg-background min-h-screen font-sans">
-      <h1 className="text-3xl font-bold mb-8">내 예약 관리</h1>
+    <div className="max-w-5xl mx-auto p-6 min-h-screen font-sans">
+      <div className="mb-10">
+        <h1 className="text-4xl font-extrabold tracking-tight mb-2">내 예약 관리</h1>
+        <p className="text-muted-foreground">신청한 클래스의 예약 현황을 확인하고 관리하세요.</p>
+      </div>
       
       {/* 탭 버튼 영역 */}
-      <div className="flex p-1 mb-8 bg-muted rounded-xl w-fit">
+      <div className="flex p-1.5 mb-8 bg-muted/50 rounded-xl w-fit border border-border/50">
         <button
           onClick={() => setActiveTab("upcoming")}
-          className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${
+          className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all duration-200 ${
             activeTab === "upcoming"
-              ? "bg-background text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground"
+              ? "bg-background text-foreground shadow-sm ring-1 ring-black/5"
+              : "text-muted-foreground hover:text-foreground hover:bg-background/50"
           }`}>
-          예정된 클래스 ({schedules.upcomingSchedules?.length || 0})
+          예정된 클래스 <span className="ml-1.5 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs">{schedules.upcomingSchedules?.length || 0}</span>
         </button>
         <button
           onClick={() => setActiveTab("past")}
-          className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${
+          className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all duration-200 ${
             activeTab === "past"
-              ? "bg-background text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground"
+              ? "bg-background text-foreground shadow-sm ring-1 ring-black/5"
+              : "text-muted-foreground hover:text-foreground hover:bg-background/50"
           }`}>
-          지난 클래스 ({schedules.pastSchedules?.length || 0})
+          지난 클래스 <span className="ml-1.5 px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs">{schedules.pastSchedules?.length || 0}</span>
         </button>
       </div>
 
@@ -158,9 +161,8 @@ const MyReservations = () => {
               return (
                 <div
                   key={reservation.reservationId}
-                  // 카드는 흰색 유지, 그림자 효과
-                  className={`bg-card rounded-2xl shadow-sm p-6 border border-border/50 transition-all hover:shadow-md ${
-                    isCancelled ? "opacity-60 grayscale" : ""
+                  className={`group bg-card rounded-2xl shadow-sm hover:shadow-md border border-border/50 p-6 transition-all duration-300 ${
+                    isCancelled ? "opacity-60 grayscale bg-muted/30" : "hover:-translate-y-1"
                   }`}>
                   <div className="flex flex-col md:flex-row gap-6">
                     <div className="flex-1">
@@ -168,14 +170,15 @@ const MyReservations = () => {
                       <div className="flex justify-between items-start mb-4">
                         <div>
                           <h3
-                            className={`text-xl font-bold ${
+                            className={`text-xl font-bold tracking-tight ${
                               isCancelled
                                 ? "text-muted-foreground line-through"
-                                : "text-foreground"
+                                : "text-foreground group-hover:text-primary transition-colors"
                             }`}>
                             {reservation.className}
                           </h3>
                           <div className="flex items-center text-muted-foreground text-sm mt-1.5">
+                            <User className="w-4 h-4 mr-1.5" />
                             <span className="font-medium text-foreground mr-2">
                               {reservation.teacherName} 강사님
                             </span>
@@ -186,7 +189,7 @@ const MyReservations = () => {
                       </div>
 
                       {/* 정보 그리드 */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-sm text-muted-foreground bg-muted/30 p-4 rounded-xl">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-sm text-muted-foreground bg-muted/30 p-4 rounded-xl border border-border/50">
                         <div className="flex items-center">
                           <span className="w-5 text-primary">📅</span>{" "}
                           {formatDate(reservation.startAt)}
@@ -212,10 +215,9 @@ const MyReservations = () => {
 
                   {/* 하단 버튼 영역 */}
                   <div className="border-t border-border/50 mt-5 pt-5 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <div className="text-xs text-muted-foreground font-medium">
-                      {isCancelled
-                        ? "취소된 예약입니다."
-                        : `예약 번호: ${reservation.reservationId}`}
+                    <div className="text-xs text-muted-foreground font-medium flex items-center gap-2">
+                      <span className="px-2 py-1 rounded bg-muted">예약번호 {reservation.reservationId}</span>
+                      {isCancelled && <span className="text-destructive font-bold">취소된 예약</span>}
                     </div>
 
                     <div className="flex space-x-3 w-full sm:w-auto">
@@ -240,12 +242,15 @@ const MyReservations = () => {
               );
             })
           ) : (
-            <div className="flex flex-col items-center justify-center h-80 text-muted-foreground bg-muted/20 rounded-3xl border border-dashed border-border">
-              <p className="text-lg font-medium">예약 내역이 없습니다.</p>
-              <p className="text-sm mt-2">새로운 클래스를 예약해보세요!</p>
+            <div className="flex flex-col items-center justify-center h-96 text-muted-foreground bg-muted/10 rounded-3xl border-2 border-dashed border-border/60">
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                <Calendar className="w-8 h-8 text-muted-foreground/50" />
+              </div>
+              <p className="text-lg font-medium text-foreground">예약 내역이 없습니다.</p>
+              <p className="text-sm mt-2 mb-6">새로운 클래스를 예약하고 특별한 하루를 만들어보세요!</p>
               <button 
                 onClick={() => navigate('/')}
-                className="mt-6 px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-bold hover:bg-primary/90 transition-colors"
+                className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/20"
               >
                 클래스 둘러보기
               </button>

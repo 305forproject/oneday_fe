@@ -12,7 +12,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import getClassDetail from "../service/class/getClassDetail";
-import AiAdvisorSection from "../features/class/AIAdvisor";
+import AiAdvisorSection from "../features/class/AiAdvisor";
 import PaymentWidgetModal from "../features/payment/PaymentModal";
 import { initKakaoMap } from "../utils/kakaoMap";
 
@@ -211,10 +211,10 @@ const ClassDetailPage = () => {
   // --- UI Rendering ---
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-white">
-        <div className="flex flex-col items-center text-blue-600">
+      <div className="min-h-screen flex justify-center items-center bg-background">
+        <div className="flex flex-col items-center text-primary">
           <Loader2 size={48} className="animate-spin mb-4" />
-          <p>클래스 정보를 불러오는 중입니다...</p>
+          <p className="text-muted-foreground">클래스 정보를 불러오는 중입니다...</p>
         </div>
       </div>
     );
@@ -222,17 +222,16 @@ const ClassDetailPage = () => {
 
   if (error || !classData) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-white">
+      <div className="min-h-screen flex justify-center items-center bg-background">
         <div className="text-center">
-          <AlertCircle size={48} className="mx-auto text-red-500 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">오류 발생</h2>
-          <p className="text-gray-600 mb-6">
+          <AlertCircle size={48} className="mx-auto text-destructive mb-4" />
+          <h2 className="text-2xl font-bold text-foreground mb-2">오류 발생</h2>
+          <p className="text-muted-foreground mb-6">
             {error || "데이터를 찾을 수 없습니다."}
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
+            className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
             다시 시도
           </button>
         </div>
@@ -243,7 +242,7 @@ const ClassDetailPage = () => {
   const images = classData.imageUrls || [];
 
   return (
-    <div className="bg-background min-h-screen pb-20">
+    <div className="bg-background min-h-screen pb-20 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Left Content */}
@@ -268,7 +267,7 @@ const ClassDetailPage = () => {
                           e.stopPropagation();
                           prevImage();
                         }}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background text-foreground p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110 backdrop-blur-sm"
                       >
                         <ChevronLeft size={24} />
                       </button>
@@ -277,7 +276,7 @@ const ClassDetailPage = () => {
                           e.stopPropagation();
                           nextImage();
                         }}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background text-foreground p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110 backdrop-blur-sm"
                       >
                         <ChevronRight size={24} />
                       </button>
@@ -293,7 +292,7 @@ const ClassDetailPage = () => {
                 </div>
               )}
               {classData.categoryName && (
-                <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
+                <span className="absolute top-4 left-4 bg-background/90 backdrop-blur-md text-foreground text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
                   {classData.categoryName}
                 </span>
               )}
@@ -301,7 +300,7 @@ const ClassDetailPage = () => {
 
             {/* Class Info */}
             <div>
-              <h1 className="text-4xl font-extrabold text-foreground mb-6 leading-tight">
+              <h1 className="text-4xl font-extrabold text-foreground mb-6 leading-tight tracking-tight">
                 {classData.className}
               </h1>
               <div className="flex flex-wrap items-center gap-y-3 gap-x-6 text-sm text-muted-foreground">
@@ -349,7 +348,7 @@ const ClassDetailPage = () => {
             <div>
               <h3
                 onClick={handleTitleClick}
-                className="text-xl font-bold text-foreground mb-6 cursor-pointer select-none active:text-muted-foreground transition-colors"
+                className="text-lg font-bold text-foreground mb-5 cursor-pointer select-none active:text-muted-foreground transition-colors"
               >
                 클래스 소개
               </h3>
@@ -396,7 +395,7 @@ const ClassDetailPage = () => {
               <h3 className="text-xl font-bold text-foreground mb-6">위치</h3>
               <div
                 id="map"
-                className="w-full h-80 bg-muted rounded-2xl border border-border overflow-hidden"
+                className="w-full h-64 bg-muted rounded-xl border border-border"
               ></div>
               <p className="text-sm text-muted-foreground mt-3 flex items-center">
                 <MapPin size={16} className="mr-1.5 text-muted-foreground/70" />
@@ -432,14 +431,14 @@ const ClassDetailPage = () => {
                         }}
                         className={`flex flex-col items-center py-3 px-1 rounded-xl border transition-all ${
                           selectedDate === item.date
-                            ? "bg-primary text-primary-foreground border-primary shadow-md scale-105"
-                            : "bg-background text-muted-foreground border-border hover:bg-muted hover:border-primary/50"
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "bg-background text-muted-foreground border-border hover:bg-muted"
                         }`}
                       >
                         <span
                           className={`text-xs mb-1 ${
                             selectedDate === item.date
-                              ? "text-primary-foreground/80"
+                              ? "text-primary-foreground/70"
                               : "text-muted-foreground/70"
                           }`}
                         >
@@ -468,15 +467,14 @@ const ClassDetailPage = () => {
                     {availableTimes.map((timeInfo) => (
                       <button
                         key={timeInfo.timeId}
-                        // [수정됨] 지난 시간일 경우 disabled 처리
                         disabled={timeInfo.isPast}
                         onClick={() => setSelectedScheduleId(timeInfo.timeId)}
                         className={`py-3.5 px-4 rounded-xl text-sm font-medium border transition-all ${
                           selectedScheduleId === timeInfo.timeId
                             ? "bg-primary text-primary-foreground border-primary shadow-md"
                             : timeInfo.isPast
-                            ? "bg-muted text-muted-foreground/50 border-border cursor-not-allowed" // [수정됨] 지난 시간 스타일
-                            : "bg-background text-foreground border-border hover:bg-muted hover:border-primary/50 cursor-pointer"
+                            ? "bg-muted text-muted-foreground border-border cursor-not-allowed opacity-50"
+                            : "bg-background text-foreground border-border hover:bg-muted cursor-pointer"
                         }`}
                       >
                         {timeInfo.timeStr}
@@ -497,8 +495,7 @@ const ClassDetailPage = () => {
                     : "bg-muted text-muted-foreground cursor-not-allowed shadow-none"
                 }`}
                 disabled={!selectedDate || !selectedScheduleId}
-                onClick={handleReserveClick}
-              >
+                onClick={handleReserveClick}>
                 예약하기
               </button>
             </div>
