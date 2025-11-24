@@ -61,7 +61,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12 font-sans">
       <div className="w-full max-w-[400px] space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold tracking-tight text-primary">OneDay</h1>

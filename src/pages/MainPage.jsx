@@ -88,12 +88,12 @@ export default function App() {
     <div className="min-h-screen bg-background text-foreground font-sans">
       <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* --- Hero / Search Section --- */}
-        <section className="relative overflow-hidden rounded-3xl bg-primary/5 px-6 py-24 text-center sm:px-16">
-          <div className="relative z-10 mx-auto max-w-3xl">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+        <section className="relative overflow-hidden rounded-3xl bg-primary/5 px-6 py-32 text-center sm:px-16">
+          <div className="relative z-10 mx-auto max-w-4xl">
+            <h1 className="text-5xl font-extrabold tracking-tight sm:text-7xl bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent animate-in fade-in slide-in-from-bottom-4 duration-1000">
               새로운 취미를 시작하세요
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground">
+            <p className="mt-8 text-xl text-muted-foreground animate-in fade-in slide-in-from-bottom-5 duration-1000 delay-200">
               다양한 원데이 클래스로 일상에 특별한 경험을 더해보세요.
               <br className="hidden sm:inline" /> 당신만의 취미가 기다리고 있습니다.
             </p>
@@ -101,7 +101,7 @@ export default function App() {
             {/* 검색 바 */}
             <form
               onSubmit={handleSearchSubmit}
-              className="mt-10 flex w-full items-center rounded-full border border-border bg-background shadow-lg transition-shadow hover:shadow-xl"
+              className="mt-12 flex w-full items-center rounded-full border border-border bg-background shadow-lg transition-all hover:shadow-xl focus-within:ring-2 focus-within:ring-primary/20 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300"
             >
               <div className="pl-6 pr-3 text-muted-foreground">
                 <Search size={22} />
@@ -123,18 +123,18 @@ export default function App() {
           </div>
           
           {/* Decorative elements */}
-          <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-          <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl opacity-50" />
+          <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl opacity-50" />
         </section>
 
         {/* --- Category Filter Section --- */}
-        <section className="mt-12">
+        <section className="mt-16">
           {loadingCategories ? (
             <div className="flex justify-center space-x-3">
               {[...Array(6)].map((_, i) => (
                 <div
                   key={i}
-                  className="h-10 w-20 animate-pulse rounded-full bg-muted"
+                  className="h-10 w-24 animate-pulse rounded-full bg-muted"
                 ></div>
               ))}
             </div>
@@ -143,13 +143,13 @@ export default function App() {
               {categories.map((category) => (
                 <button
                   key={category.categoryId}
-                  onClick={() => handleCategoryClick(category.categoryId)} // 이벤트 핸들러 변경
+                  onClick={() => handleCategoryClick(category.categoryId)}
                   className={`
-                    rounded-full px-5 py-2 text-sm font-semibold transition-all
+                    rounded-full px-6 py-2.5 text-sm font-medium transition-all duration-200
                     ${
                       selectedCategory === category.categoryId
-                        ? "bg-primary text-primary-foreground shadow-md"
-                        : "bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground"
+                        ? "bg-primary text-primary-foreground shadow-lg scale-105 ring-2 ring-primary ring-offset-2"
+                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:scale-105"
                     }
                   `}
                 >
